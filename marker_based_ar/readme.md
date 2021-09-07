@@ -11,7 +11,7 @@ https://www.youtube.com/watch?v=NIXJJoqM8BQ&t=319s
 3. activate your virtual environment
     * source myenv/bin/activate
 4. install requirements.txt for setup
-    * pip install requirements.txt
+    * pip install -r requirements.txt
 5. go to the MARKER_BASED_AR folder
 6. Running program using 
     * node server.js
