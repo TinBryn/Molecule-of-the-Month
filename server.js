@@ -5,12 +5,15 @@ const path = require('path');
 app.set("/","html");
 app.use(express.static(path.join(__dirname,"/")));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+
+let port = parseInt(process.env.PORT || "8080") || 8080
+
 
 app.get('/',(req,res) => {
     res.render('index');
 });
 
-app.listen(8080,() => {
-    console.log("listen on http://localhost:8080");
+app.listen(port,() => {
+    console.log("listen on http://localhost:" + port);
 });
