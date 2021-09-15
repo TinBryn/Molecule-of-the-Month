@@ -1,11 +1,3 @@
-//Remove this later
-async function testConvertor() {
-    const getter = require('./convertor/moleculegetter.js');
-    const convertor = require('./convertor/convertor.js');
-    const data = await getter.getMoleculeOfTheMonth();
-    convertor.parsePdbFile(data);
-}
-testConvertor();
 
 const express = require('express');
 const app = express();
@@ -21,13 +13,10 @@ app.use(express.urlencoded({ extended: false }));
 
 const port = parseInt(process.env.PORT || "8080") || 8080
 
-
-
 app.get('/',(req,res) => {
     res.render('index');
 });
 
 app.listen(port,() => {
     console.log("listen on http://localhost:" + port);
-
 });

@@ -11,8 +11,8 @@ async function getMoleculeData() {
 //Debug get molecule
 async function getMoleculeDataDebug() {
 
-    const moleculeFileName = 'benzene_unit_cell.pdb';
-    const data = await fs.readFile(`convertor/debug/${moleculeFileName}`);
+    const moleculeFileName = 'ZIF8[22].pdb';
+    const data = await fs.readFile(`convertor/debug/${moleculeFileName}`, 'utf-8');
     return data.toString();
 }
 
