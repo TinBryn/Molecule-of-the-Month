@@ -1,26 +1,20 @@
 const enviroment = require('dotenv');
 enviroment.config();
 
-const fileSystem = require('fs');
+const fs = require('fs').promises;
 
 //Get molecule from API
-function getMoleculeData() {
+async function getMoleculeData() {
 
 }
 
 //Debug get molecule
-function getMoleculeDataDebug() {
+async function getMoleculeDataDebug() {
 
-    const moleculeFileName = '2bpz.pdb';
-    fileSystem.readFile(`convertor/debug/${moleculeFileName}`, function(err, data){
-        if(err) {
-            console.log(err);
-        }
-        else {
-            return data.toString();
-        }
-    });
+    const moleculeFileName = 'benzene_unit_cell.pdb';
+    const data = await fs.readFile(`convertor/debug/${moleculeFileName}`);
+    return data.toString();
 }
 
 if(process.env.DEVELOPMENT_ENVIRONMENT == 'develop') exports.getMoleculeOfTheMonth = getMoleculeDataDebug;
-else exports.getMoleculeOfTheMonth = getMoleculeData;
+else exports.getMoleculeOfTheMonth = getMoleculeDataDebug;
