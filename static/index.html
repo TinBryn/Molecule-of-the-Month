@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <!--Build models rendered on the AR platform-->
-    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="build/aframe.min.js"></script>
+    <script src="build/aframe-ar.js"></script>
 
     <body style="margin: 0px; overflow: hidden;">
         <!--Build scene-->
@@ -20,7 +20,8 @@
                 <a-entity
                     position="0 0 -1"
                     scale="1 1 1"
-                    text="width:5; lineHeight:60; letterSpacing:3; color:white; value:Welcome to use this web app. Please contract us if you find any problem.">
+                    text="width:5; lineHeight:60; letterSpacing:3; color:white; value:Welcome to use this web app. Please contract us if you find any problem."
+                    rotation="-60 0 0">
                 </a-entity>
             </a-marker>
             <a-entity camera></a-entity>
