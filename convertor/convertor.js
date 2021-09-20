@@ -3,19 +3,17 @@
 const ATOM_NAME = 'ATOM  ';
 const RESIDUE_NAME = 'SEQRES';
 const HETATM_NAME = 'HETATM';
+const CONECT = "CONECT";
 
-function parsePdbFile(pdbFile) {
-    //Get type of file
-    //Get processor from dictionary
 
-    const { readFileSync } = require('fs');
-    
-    const pdb = readFileSync(pdbFile, 'utf8');
-    const pdbLines = pdb.split('\n');
+function parsePdbString(pdbString) {
+  
+    const pdbLines = pdbString.split('\n');
     const atoms = [];
     const seqRes = []; // raw SEQRES entry data
     let residues = []; // individual residue data parsed from SEQRES
     const chains = new Map(); // individual rchaindata parsed from SEQRES
+    const connections = new Map();
   
     // Iterate each line looking for atoms
     pdbLines.forEach((pdbLine) => {
@@ -83,6 +81,18 @@ function parsePdbFile(pdbFile) {
           charge: pdbLine.substring(78, 80).trim(),
         });
       }
+      else if (pdbLine.substr(0, 6) === CONECT) {
+        pdbLine = pdbLine.replace(/ +(?= )/g,'');
+        const pdbValues = pdbLine.split(' ')
+        const moleculeId = pdbValues[1];
+        const bonded = pdbValues.slice(2);
+        if(connections.has(moleculeId)) {
+          connections[moleculeId].addRange(bonded);
+        }
+        else{
+          connections.set(moleculeId, new Array(bonded));
+        }
+      }
     });
   
     // Add residues to chains
@@ -106,10 +116,22 @@ function parsePdbFile(pdbFile) {
       // Derived
       residues, // Array of residue objects
       chains, // Map of chain objects keyed on chainID
+      connections,
     };
 
 }
+function parsePdbFile(pdbFile) {
+    //Get type of file
+    //Get processor from dictionary
 
+    const { readFileSync } = require('fs');
+    
+    const pdb = readFileSync(pdbFile, 'utf8');
+    return parsePdbString(pdb);
+}
+
+exports.parsePdbString= parsePdbString;
 exports.parsePdbFile = parsePdbFile;
+
 
 
