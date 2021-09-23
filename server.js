@@ -31,4 +31,8 @@ function configureRoutes(app) {
     app.get("/admin/cms", (req, res) => {
         res.sendFile(path.join(__dirname, "static", "cms.html"));
     });
+
+    app.get("/api/molecule", (req, res) => {
+        res.sendFile(path.join(__dirname, "static", "molfile", "dna1.gltf"));
+    });
 }
