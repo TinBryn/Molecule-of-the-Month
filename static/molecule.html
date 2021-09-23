@@ -26,7 +26,7 @@
         gesture-detector
         id="scene"
         >
-            <!--Add marker (hiro) in the scene-->
+            <!--Define what model will be rendered on top of the marker-->
             <a-assets>
                 <a-asset-item
                   id="bowser"
@@ -34,6 +34,7 @@
                 >
                 </a-asset-item>
               </a-assets>
+            <!--Add marker (hiro) in the scene-->
             <a-marker 
             preset="hiro"
             raycaster="objects:clickable"
@@ -41,7 +42,6 @@
             cursor="fuse: false; rayOrigin: mouse;"
             id="markerA"
             >
-                <!--Define what model will be rendered on top of the marker-->
                 <!--Position (x,y,z)-->
                 <!--Render gltf model file-->
 
