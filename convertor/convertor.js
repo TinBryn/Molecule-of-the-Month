@@ -132,6 +132,3 @@ function parsePdbFile(pdbFile) {
 
 exports.parsePdbString= parsePdbString;
 exports.parsePdbFile = parsePdbFile;
-
-
-
