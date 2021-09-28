@@ -11,7 +11,11 @@ app.use(express.static(path.join(__dirname, "static")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const port = parseInt(process.env.PORT || "8080") || 8080
+// get the prot from the deployment environment or use 8080 as default
+const port = parseInt(process.env.PORT || "8080") || 8080;
+
+// get the database url from the deployment environment
+const dbUrl = process.env.DATABASE_URL;
 
 configureRoutes(app);
 
