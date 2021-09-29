@@ -1,28 +1,14 @@
 <!DOCTYPE html>
-<html>
-    <!--Build models rendered on the AR platform-->
-    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
+<html lang="en">
 
-    <body style="margin: 0px; overflow: hidden;">
-        <!--Build scene-->
-        <a-scene embedded arjs>
-            <!--Add marker (hiro) in the scene-->
-            <a-marker preset="hiro">
-                <!--Define what model will be rendered on top of the marker-->
-                <!--Position (x,y,z)-->
-                <a-box position="0 1.0 0" material="color:red;">
-                    <!--Animation test-->
-                    <a-animation attribute="rotation"
-                        dur="3000"
-                        to="360 360 0"
-                        repeat="indefinite"
-                        easing="linear">
-                    </a-animation>
-                </a-box>
-            </a-marker>
-            <a-entity camera></a-entity>
-        </a-scene>
+<head>
+    <title>Molecule of the Month</title>
+</head>
 
-    </body>
+<body>
+    <h1>Welcome to the Molecule of the Month Web AR application</h1>
+
+    <a href="/molecule">Open app</a>
+</body>
+
 </html>
