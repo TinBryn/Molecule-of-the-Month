@@ -1,14 +1,75 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+    <style>
+        body {
+            background-image: url('background/background.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            padding: 0;
+            margin: 0;
+        }
+        
+       h1 {
+            font-size: 60px;
+            font-family: verdana;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: white;
+            position: absolute;
+            top: 25%;
+        }
+        
+        .btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            background-color: #f1f1f1;
+            font-size: 25px;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            font-family: verdana;
+        }
+        
+        footer {
+            position: fixed;
+            bottom: 0;
+            color: grey;
+        }
+        
+        a:link,
+        a:visited {
+            color: black;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+
     <title>Molecule of the Month</title>
 </head>
 
 <body>
-    <h1>Welcome to the Molecule of the Month Web AR application</h1>
 
-    <a href="/molecule">Open app</a>
+    <h1> Welcome to the Molecule of the Month Web AR application</h1>
+
+    <button class="btn"><a href="/molecule">Open app</a></button>
+
+
+    <footer>
+        <p>Image scource: https://www.ft.com/content/212f9436-9a03-11e6-8f9b-70e3cabccfae </p>
+    </footer>
+
+
 </body>
 
 </html>
