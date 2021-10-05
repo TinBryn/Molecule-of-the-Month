@@ -17,8 +17,25 @@ or use a package manager such as `apt`, `brew` with `[package-manager] install n
 4. If you have an enviroment variable `PORT` it will parse this into a number, otherwise it will default to `8080`
 
 5. go to http://localhost:PORT in a browser on a device with a camera
+    
+## CMS/Content Delivery
 
-6. Open your camera and use the marker from source
-    * https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png
-    
-    
+### Description
+This is a website application designed to go alongside the mobile app for viewing 3D molecular models in AR. This component of the project is focused on allowing priveliged users to access a routed website aside from the application to upload the 3D models necessary.
+
+### Features
+* An accessible user interface
+* Access to authorised individuals (implemented through user authentication)
+* The uploading of abstract files
+* The storing of files
+* Downloading files to a user 
+
+### Usage
+
+Beyond the above steps for running the program, this application requires a session hash that is used to encrypt user passwords. Navigate to the base directory and create a new file '.env' with a single line
+
+`SESSION_SECRET=secret` 
+
+The word secret can be substituted for any word of your choosing.
+
+Once on the landing page, navigate to the login page. From here, you can register a user. Enter in your details and you will be redirected, and able to log in. After logging in, you will be redirected to the submit page, where you can upload a file. Once you choose a file to submit and you submit it, you will see the message, 'File Uploaded', and you will see your file in the 'files' directory in your copy of the repository.
