@@ -32,7 +32,6 @@ function getColourMap(atoms) {
   //Load molecule data
   for(atom of atoms) {
     const atomName = atom['element'];
-    const colour = availableColours[colourIndex];
 
     if(atomName in colourMap) continue;
     const material = new THREE.MeshLambertMaterial();
@@ -40,7 +39,6 @@ function getColourMap(atoms) {
       {
         color: 'crimson'
       }));
-    colourIndex += 1;
   }
   return colourMap;
 }
@@ -48,7 +46,6 @@ function getColourMap(atoms) {
 function getBallAndStick(moleculeObj) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
-  console.log(colourMap);
 
   const loader = new exporter();
 
