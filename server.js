@@ -11,13 +11,19 @@ app.use(express.static(path.join(__dirname, "static")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// get the prot from the deployment environment or use 8080 as default
+// get the port from the deployment environment or use 8080 as default
 const port = parseInt(process.env.PORT || "8080") || 8080;
 
 // get the database url from the deployment environment
 const dbUrl = process.env.DATABASE_URL;
 
+const convertor = require('./convertor/convertor.js');
+const render = require('./convertor/moleculegltfconvertor.js');
+
+
+
 configureRoutes(app);
+
 
 app.listen(port, () => {
     console.log("listen on http://localhost:" + port);

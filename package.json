@@ -4,18 +4,25 @@
     "description": "",
     "main": "index.js",
     "directories": {
-        "test": "test"
+        "test": "tests"
     },
     "scripts": {
         "start": "node server.js",
-        "test": "echo \"Error:no test specified\" && exit 1"
+        "test": "jest"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "canvas": "^2.8.0",
         "dotenv": "^10.0.0",
         "express": "^4.16.4",
-        "parse-pdb": "^1.0.0"
+        "fs": "0.0.1-security",
+        "three": "^0.133.0",
+        "three-gltf-exporter": "^0.0.1",
+        "vblob": "^1.0.2"
+    },
+    "devDependencies": {
+        "jest": "^27.2.1"
     }
 }
