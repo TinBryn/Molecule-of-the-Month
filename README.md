@@ -17,6 +17,10 @@ or use a package manager such as `apt`, `brew` with `[package-manager] install n
 4. If you have an enviroment variable `PORT` it will parse this into a number, otherwise it will default to `8080`
 
 5. go to http://localhost:PORT in a browser on a device with a camera
+
+6. If using the AR application, the marker necessary to track the molecule is located at: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png
+
+
     
 ## CMS/Content Delivery
 
