@@ -21,37 +21,87 @@ global.document = {
   }
 };
 
+function getColourMap(atoms) {
+
+  //Load from config
+  let colourIndex = 0;
+  //X11 colour names
+  const availableColours = ['skyblue', 'crimson', 'gray'];
+
+  const colourMap =  new Map();
+  //Load molecule data
+  for(atom of atoms) {
+    const atomName = atom['element'];
+    const colour = availableColours[colourIndex];
+
+    if(atomName in colourMap) continue;
+    const material = new THREE.MeshLambertMaterial();
+    colourMap.set(atomName, new THREE.MeshLambertMaterial(
+      {
+        color: 'crimson'
+      }));
+    colourIndex += 1;
+  }
+  return colourMap;
+}
+
 function getBallAndStick(moleculeObj) {
 
-    const loader = new exporter();
-    const scene = new THREE.Scene();
-    const fov = 75;
+  const colourMap = getColourMap(moleculeObj.atoms);
+  console.log(colourMap);
 
-    const camera = new THREE.PerspectiveCamera( 50, 0.5 * 2, 1, 10000 );
-    camera.position.z = 2500;
+  const loader = new exporter();
 
-    const baseSphere = new THREE.Sphere();
-    const baseMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  const VIEW_ANGLE = 45;
+  const NEAR = 0.1;
+  const FAR = 10000;
+
+  const camera =
+  new THREE.PerspectiveCamera(
+      VIEW_ANGLE,
+      2,
+      NEAR,
+      FAR
+  );
+
+  const scene = new THREE.Scene();
+  scene.add(camera);
+
+
+  const RADIUS = 50;
+  const SEGMENTS = 16;
+  const RINGS = 16;
+
+  const sphereMaterial =
+  new THREE.MeshLambertMaterial(
+    {
+      color: 0xCC0000
+    });
 
     for(atom of moleculeObj.atoms) {
-      const geometry = new THREE.SphereGeometry( 15, 32, 16 );
-      const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-      const atomRender = new THREE.Mesh( geometry, material );
-      atomRender.x = atom['x'];
-      atomRender.y = atom['y'];
-      atomRender.z = atom['z'];
+
+      const material = colourMap.get(atom['element']);
+      const atomRender = new THREE.Mesh(
+        new THREE.SphereGeometry(
+            RADIUS,
+            SEGMENTS,
+            RINGS),
+        
+        material);
+      
+      //*100 just to scale further apart
+      atomRender.position.x = atom['x'] * 100;
+      atomRender.position.y = atom['y'] * 100;
+      atomRender.position.z = atom['z'] * 100;
       scene.add(atomRender);
   }
   
-
-    loader.parse(scene, (content) => {
-        fs = require('fs');
-        fs.writeFile('test.gltf', JSON.stringify(content), function (err) {
-          if (err) return console.log(err);
-        }); 
-      },);
-
-
+  loader.parse(scene, (content) => {
+    fs = require('fs');
+    fs.writeFile('test.gltf', JSON.stringify(content), function (err) {
+      if (err) return console.log(err);
+    }); 
+  },);
 }
 
 
