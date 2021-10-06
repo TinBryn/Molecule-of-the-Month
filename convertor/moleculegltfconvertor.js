@@ -58,6 +58,18 @@ function getColourMap(atoms) {
   return colourMap;
 }
 
+function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
+
+  const lineMaterial = new THREE.LineBasicMaterial({ color: 'white' });
+  const points = [];
+  points.push( new THREE.Vector3( x1, y1, z1 ) );
+  points.push( new THREE.Vector3( x2, y2, z2 ) );
+
+  const geometry = new THREE.BufferGeometry().setFromPoints( points );
+  const line = new THREE.Line( geometry, lineMaterial );
+  return line;
+}
+
 function getBallAndStick(moleculeObj, outputPath) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
@@ -78,7 +90,6 @@ function getBallAndStick(moleculeObj, outputPath) {
   const scene = new THREE.Scene();
   scene.add(camera);
 
-
   const RADIUS = 50;
   const SEGMENTS = 16;
   const RINGS = 16;
@@ -89,7 +100,9 @@ function getBallAndStick(moleculeObj, outputPath) {
       color: 0xCC0000
     });
 
-    for(atom of moleculeObj.atoms) {
+    for(let i = 0; i < moleculeObj.atoms.length; i++) {
+
+      const atom = moleculeObj.atoms[i];
 
       let colour = 'pink';
       if(colourMap.has(atom['element'])) colour = colourMap.get(atom['element']);
@@ -106,9 +119,25 @@ function getBallAndStick(moleculeObj, outputPath) {
         material);
       
       //*100 just to scale further apart
-      atomRender.position.x = atom['x'] * 100;
-      atomRender.position.y = atom['y'] * 100;
-      atomRender.position.z = atom['z'] * 100;
+      const xPos = atom['x'] * 100;
+      const yPos = atom['y'] * 100;
+      const zPos = atom['z'] * 100;
+  
+      const bonds = moleculeObj.connections.get(atom['serial'].toString());
+      for(const bond of bonds) {
+        const targetAtom = moleculeObj.atoms[parseInt(bond) - 1];
+        const targetX = targetAtom['x'] * 100;
+        const targetY = targetAtom['y'] * 100;
+        const targetZ = targetAtom['z'] * 100;
+
+        const line = getBallAndStickBond(xPos, targetX, yPos, targetY, zPos, targetZ);
+        scene.add(line);
+      }
+
+      atomRender.position.x = xPos;
+      atomRender.position.y = yPos;
+      atomRender.position.z = zPos;
+
       scene.add(atomRender);
   }
   

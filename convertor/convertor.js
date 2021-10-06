@@ -90,7 +90,7 @@ function parsePdbString(pdbString) {
           connections[moleculeId].addRange(bonded);
         }
         else{
-          connections.set(moleculeId, new Array(bonded));
+          connections.set(moleculeId, bonded);
         }
       }
     });
