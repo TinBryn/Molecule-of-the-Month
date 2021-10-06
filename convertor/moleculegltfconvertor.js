@@ -23,30 +23,44 @@ global.document = {
 
 function getColourMap(atoms) {
 
-  //Load from config
-  let colourIndex = 0;
-  //X11 colour names
-  const availableColours = ['skyblue', 'crimson', 'gray'];
-
   const colourMap =  new Map();
-  //Load molecule data
-  for(atom of atoms) {
-    const atomName = atom['element'];
+  colourMap.set('H', 'white');
+  colourMap.set('C', 'black');
+  colourMap.set('O', 'blue');
+  colourMap.set('N', 'red');
+  colourMap.set('F', 'green');
+  colourMap.set('Cl', 'green');
+  colourMap.set('Br', 'darkred');
+  colourMap.set('I', 'darkviolet');
+  colourMap.set('He', 'cyan');
+  colourMap.set('Ne', 'cyan');
+  colourMap.set('Ar', 'cyan');
+  colourMap.set('Kr', 'cyan');
+  colourMap.set('Xe', 'cyan');
+  colourMap.set('P', 'orange');
+  colourMap.set('S', 'yellow');
+  colourMap.set('B', 'beige');
+  colourMap.set('Li', 'violet');
+  colourMap.set('Na', 'violet');
+  colourMap.set('K', 'violet');
+  colourMap.set('Rb', 'violet');
+  colourMap.set('Cs', 'violet');
+  colourMap.set('Fr', 'violet');
+  colourMap.set('Be', 'darkgreen');
+  colourMap.set('Mg', 'darkgreen');
+  colourMap.set('Ca', 'darkgreen');
+  colourMap.set('Sr', 'darkgreen');
+  colourMap.set('Ba', 'darkgreen');
+  colourMap.set('Ra', 'darkgreen');
+  colourMap.set('Ti', 'grey');
+  colourMap.set('Fe', 'darkorange');
 
-    if(atomName in colourMap) continue;
-    const material = new THREE.MeshLambertMaterial();
-    colourMap.set(atomName, new THREE.MeshLambertMaterial(
-      {
-        color: 'crimson'
-      }));
-  }
   return colourMap;
 }
 
-function getBallAndStick(moleculeObj) {
+function getBallAndStick(moleculeObj, outputPath) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
-
   const loader = new exporter();
 
   const VIEW_ANGLE = 45;
@@ -77,7 +91,12 @@ function getBallAndStick(moleculeObj) {
 
     for(atom of moleculeObj.atoms) {
 
-      const material = colourMap.get(atom['element']);
+      let colour = 'pink';
+      if(colourMap.has(atom['element'])) colour = colourMap.get(atom['element']);
+      
+      const material = new THREE.MeshLambertMaterial({
+        color: colour,
+      });
       const atomRender = new THREE.Mesh(
         new THREE.SphereGeometry(
             RADIUS,
@@ -95,7 +114,7 @@ function getBallAndStick(moleculeObj) {
   
   loader.parse(scene, (content) => {
     fs = require('fs');
-    fs.writeFile('test.gltf', JSON.stringify(content), function (err) {
+    fs.writeFile(outputPath, JSON.stringify(content), function (err) {
       if (err) return console.log(err);
     }); 
   },);

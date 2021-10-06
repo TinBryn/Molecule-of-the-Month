@@ -16,8 +16,8 @@ test('Test Convertor reads CdTe.pdb atoms', () => {
 //     expect(atomData.length).not.toBe(0);
 // });
 
-test("Test renderer", () => {
-    const pdbString = readFileSync('./convertor/debug/CdTe.pdb', 'utf8');
-    const atomData = convertor.parsePdbString(pdbString);
-    gltfConvertor.getBallAndStick(atomData);
-});
+// test("Test renderer", () => {
+//     const pdbString = readFileSync('./convertor/debug/CdTe.pdb', 'utf8');
+//     const atomData = convertor.parsePdbString(pdbString);
+//     gltfConvertor.getBallAndStick(atomData);
+// });
