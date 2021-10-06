@@ -26,8 +26,8 @@ function getColourMap(atoms) {
   const colourMap =  new Map();
   colourMap.set('H', 'white');
   colourMap.set('C', 'black');
-  colourMap.set('O', 'blue');
-  colourMap.set('N', 'red');
+  colourMap.set('O', 'red');
+  colourMap.set('N', 'blue');
   colourMap.set('F', 'green');
   colourMap.set('Cl', 'green');
   colourMap.set('Br', 'darkred');
