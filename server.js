@@ -71,7 +71,7 @@ function configureRoutes(app) {
     });
 
     app.get("/api/molecule", (req, res) => {
-        res.sendFile(path.join(__dirname, "static", "molfile", "test.gltf"));
+        res.sendFile(path.join(__dirname, "static", "molfile", "dna1.gltf"));
     });
 
     // The below HTTP methods are used in the simple CMS app
