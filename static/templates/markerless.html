@@ -1,289 +1,66 @@
-<!--
-/*
- * Copyright 2017 Google Inc. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
--->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <title>three.ar.js - Anchors</title>
+  <head>
+    <title>WebAR Gladiador</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no,
-  minimum-scale=1.0, maximum-scale=1.0">
-    <style>
-        body {
-            font-family: monospace;
-            margin: 0;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100vh;
-            -webkit-user-select: none;
-            user-select: none;
-        }
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        #info {
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            transform: translate(-50%, 0);
-            margin: 1em;
-            z-index: 10;
-            display: block;
-            width: 100%;
-            line-height: 2em;
-            text-align: center;
-        }
+    <link rel="stylesheet" href="./styles.css">
+    
+    <!-- The following libraries and polyfills are recommended to maximize browser support -->
+    <!-- NOTE: you must adjust the paths as appropriate for your project -->
+    
+    <!-- 🚨 REQUIRED: Web Components polyfill to support Edge and Firefox < 63 -->
+<!--     <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.1.3/webcomponents-loader.js"></script> -->
 
-        #info a,
-        #info .title {
-            padding: 0.4em 0.6em;
-            border-radius: 0.1em;
-        }
+    <!-- 💁 OPTIONAL: Intersection Observer polyfill for better performance in Safari and IE11 -->
+<!--     <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script> -->
 
-        #info a {
-            color: rgba(255, 255, 255, 0.8);
-            background-color: rgba(40, 40, 40, 0.6);
-            font-weight: bold;
-            text-decoration: none;
-        }
+    <!-- 💁 OPTIONAL: Resize Observer polyfill improves resize behavior in non-Chrome browsers -->
+<!--     <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.js"></script> -->
+    
+    <!-- 💁 OPTIONAL: The :focus-visible polyfill removes the focus ring for some input types -->
+    <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
 
-        .title {
-            color: rgba(255, 255, 255, 0.9);
-            background-color: rgba(40, 40, 40, 0.4);
-            margin-left: 0.2em;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-    </style>
-</head>
-
+  </head> 
 <body>
-    <div id="info">
-        <a href="https://github.com/google-ar/three.ar.js">three.ar.js</a><span class="title">Tap to spawn and anchor
-            objects at camera position</span>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.133.1/build/three.min.js"></script>
-    <script src="../scripts/VRControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three.ar.js@latest/dist/three.ar.js"></script>
-    <script>
+  <div class="row">
+  <div id="card">
+    <!-- All you need to put beautiful, interactive 3D content on your site: -->
+    <model-viewer src="https://bayliss-xr.herokuapp.com/api/molecule"
+                  ios-src="./assets/gladiador.usdz"
+                  poster="./assets/gladiador.png"
+                  alt="A 3D model of an Gladiador"
+                  shadow-intensity="1"
+                  camera-controls
+                  auto-rotate ar>
+    </model-viewer>
+    <section class="attribution">
+      <span>
+        <h1>Gladiador</h1>
+        <span>By <a href="https://sketchfab.com/3d-models/gladiador-874fc7e11d674f51a4dc2082d29c9b9a" target="_blank">SketchFab</a></span>
+        <br>
+        <span>Demo by<a href="https://www.antdevelopers.com" target="_blank">ANT Developers</a></span>
+      </span>
+      <a class="cc" href="https://creativecommons.org/licenses/by/2.0/" target="_blank">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg">
+      </a>
+    </section>  
+  </div>
+  </div>
 
-        var vrDisplay;
-        var vrFrameData;
-        var vrControls;
-        var arView;
+  <!-- 💁 Include both scripts below to support all browsers! -->
 
-        var canvas;
-        var camera;
-        var scene;
-        var renderer;
-        var cube;
-        var cubes = [];
+  <!-- Loads <model-viewer> for modern browsers: -->
+  <script type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
 
-        var anchorManager;
-
-        var CUBE_SIZE_IN_METERS = 0.18;
-
-        var colors = [
-            new THREE.Color(0xffffff),
-            new THREE.Color(0xffff00),
-            new THREE.Color(0xff00ff),
-            new THREE.Color(0xff0000),
-            new THREE.Color(0x00ffff),
-            new THREE.Color(0x00ff00),
-            new THREE.Color(0x0000ff),
-            new THREE.Color(0x000000)
-        ];
-
-        /**
-         * Use the `getARDisplay()` utility to leverage the WebVR API
-         * to see if there are any AR-capable WebVR VRDisplays. Returns
-         * a valid display if found. Otherwise, display the unsupported
-         * browser message.
-         */
-        THREE.ARUtils.getARDisplay().then(function (display) {
-            if (display) {
-                vrFrameData = new VRFrameData();
-                vrDisplay = display;
-                init();
-            } else {
-                THREE.ARUtils.displayUnsupportedMessage();
-            }
-        });
-
-        function init() {
-            // Turn on the debugging panel
-            var arDebug = new THREE.ARDebug(vrDisplay);
-            document.body.appendChild(arDebug.getElement());
-
-            // Setup the three.js rendering environment
-            renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setPixelRatio(window.devicePixelRatio);
-            console.log('setRenderer size', window.innerWidth, window.innerHeight);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.autoClear = false;
-            canvas = renderer.domElement;
-            document.body.appendChild(canvas);
-            scene = new THREE.Scene();
-
-            // Creating the ARView, which is the object that handles
-            // the rendering of the camera stream behind the three.js
-            // scene
-            arView = new THREE.ARView(vrDisplay, renderer);
-
-            // The ARPerspectiveCamera is very similar to THREE.PerspectiveCamera,
-            // except when using an AR-capable browser, the camera uses
-            // the projection matrix provided from the device, so that the
-            // perspective camera's depth planes and field of view matches
-            // the physical camera on the device.
-            camera = new THREE.ARPerspectiveCamera(
-                vrDisplay,
-                60,
-                window.innerWidth / window.innerHeight,
-                vrDisplay.depthNear,
-                vrDisplay.depthFar
-            );
-
-            // VRControls is a utility from three.js that applies the device's
-            // orientation/position to the perspective camera, keeping our
-            // real world and virtual world in sync.
-            vrControls = new THREE.VRControls(camera);
-
-            // Create the cube geometry that we'll copy and place in the
-            // scene when the user clicks the screen
-            var geometry = new THREE.BoxGeometry(0.05, 0.05, 0.05);
-            var faceIndices = ['a', 'b', 'c'];
-            for (var i = 0; i < geometry.faces.length; i++) {
-                var f = geometry.faces[i];
-                for (var j = 0; j < 3; j++) {
-                    var vertexIndex = f[faceIndices[j]];
-                    f.vertexColors[j] = colors[vertexIndex];
-                }
-            }
-            var material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
-            cube = new THREE.Mesh(geometry, material);
-
-            // Bind our event handlers
-            window.addEventListener('resize', onWindowResize, false);
-            window.addEventListener('touchstart', onClick, false);
-
-            anchorManager = new THREE.ARAnchorManager(vrDisplay);
-
-            // Kick off the render loop!
-            update();
-        }
-
-        /**
-         * The render loop, called once per frame. Handles updating
-         * our scene and rendering.
-         */
-        function update() {
-            // Clears color from the frame before rendering the camera (arView) or scene.
-            renderer.clearColor();
-
-            // Render the device's camera stream on screen first of all.
-            // It allows to get the right pose synchronized with the right frame.
-            arView.render();
-
-            // Update our camera projection matrix in the event that
-            // the near or far planes have updated
-            camera.updateProjectionMatrix();
-
-            // From the WebVR API, populate `vrFrameData` with
-            // updated information for the frame
-            vrDisplay.getFrameData(vrFrameData);
-
-            // Update our perspective camera's positioning
-            vrControls.update();
-
-            // Render our three.js virtual scene
-            renderer.clearDepth();
-            renderer.render(scene, camera);
-
-            // Kick off the requestAnimationFrame to call this function
-            // on the next frame
-            requestAnimationFrame(update);
-        }
-
-        /**
-         * On window resize, update the perspective camera's aspect ratio,
-         * and call `updateProjectionMatrix` so that we can get the latest
-         * projection matrix provided from the device
-         */
-        function onWindowResize() {
-            console.log('setRenderer size', window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        /**
-         * When clicking on the screen, create a cube at the user's
-         * current position.
-         */
-        function onClick(e) {
-            // If the user touched with 2 or more fingers, remove the latest model and
-            // its anchor.
-            if (cubes.length > 0 && e.touches.length > 1) {
-                anchorManager.remove(cubes[0]);
-                scene.remove(cubes[0]);
-                cubes.splice(0, 1);
-                return;
-            }
-
-            // Fetch the pose data from the current frame
-            var pose = vrFrameData.pose;
-
-            // Convert the pose orientation and position into
-            // THREE.Quaternion and THREE.Vector3 respectively
-            var ori = new THREE.Quaternion(
-                pose.orientation[0],
-                pose.orientation[1],
-                pose.orientation[2],
-                pose.orientation[3]
-            );
-
-            var pos = new THREE.Vector3(
-                pose.position[0],
-                pose.position[1],
-                pose.position[2]
-            );
-
-            var dirMtx = new THREE.Matrix4();
-            dirMtx.makeRotationFromQuaternion(ori);
-
-            var push = new THREE.Vector3(0, 0, -1.0);
-            push.transformDirection(dirMtx);
-            pos.addScaledVector(push, 0.125);
-
-            // Clone our cube object and place it at the camera's
-            // current position
-            var cubeClone = cube.clone();
-            scene.add(cubeClone);
-            cubeClone.position.copy(pos);
-            cubeClone.quaternion.copy(ori);
-
-            cubes.push(cubeClone);
-
-            anchorManager.add(cubeClone);
-        }
-    </script>
+  <!-- Loads <model-viewer> for old browsers like IE11: -->
+  <script nomodule
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js">
+  </script>
 </body>
-
 </html>
