@@ -78,6 +78,10 @@ function configureRoutes(app) {
         res.sendFile(path.join(__dirname, "static", "molfile", "dna1.gltf"));
     });
 
+    app.get("/api/molecule_ar", (req, res) => {
+        res.sendFile(path.join(__dirname, "static", "molfile", "dna1.usdz"));
+    });
+
     // The below HTTP methods are used in the simple CMS app
     // the /submit route is used to upload files. Only accessible by authorised users. 
     app.get('/submit', checkAuthenticated, (req, res) => {
