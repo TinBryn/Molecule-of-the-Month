@@ -66,6 +66,10 @@ function configureRoutes(app) {
         res.sendFile(path.join(__dirname, "static", "templates/molecule.html"));
     });
 
+    app.get("/markerless", (req, res) => {
+        res.sendFile(path.join(__dirname, "static", "templates/markerless.html"));
+    })
+
     app.get("/admin/cms", (req, res) => {
         res.sendFile(path.join(__dirname, "static", "templates/cms.html"));
     });
