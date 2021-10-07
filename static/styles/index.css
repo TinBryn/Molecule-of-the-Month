@@ -47,6 +47,21 @@ h1 {
     font-family: verdana;
 }
 
+.btn3 {
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    font-size: 25px;
+    padding: 16px 30px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-family: verdana;
+}
+
 footer {
     position: fixed;
     bottom: 0;
