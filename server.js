@@ -59,15 +59,15 @@ function configureRoutes(app) {
     app.use(methodOverride('_method'))
     app.use(fileUpload())
     app.get('/', (_req, res) => {
-        res.sendFile(path.join(__dirname, "static", "index.html"));
+        res.sendFile(path.join(__dirname, "static", "templates/index.html"));
     });
 
     app.get('/molecule', (req, res) => {
-        res.sendFile(path.join(__dirname, "static", "molecule.html"));
+        res.sendFile(path.join(__dirname, "static", "templates/molecule.html"));
     });
 
     app.get("/admin/cms", (req, res) => {
-        res.sendFile(path.join(__dirname, "static", "cms.html"));
+        res.sendFile(path.join(__dirname, "static", "templates/cms.html"));
     });
 
     app.get("/api/molecule", (req, res) => {
