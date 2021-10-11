@@ -1,7 +1,10 @@
 const THREE = require('three');
 const Canvas = require('canvas');
 const exporter = require('three-gltf-exporter');
-const { Blob, FileReader } = require('vblob');
+const {
+  Blob,
+  FileReader
+} = require('vblob');
 
 // Patch global scope to imitate browser environment.
 // From https://gist.github.com/donmccurdy/9f094575c1f1a48a2ddda513898f6496
@@ -23,7 +26,7 @@ global.document = {
 
 function getColourMap(atoms) {
 
-  const colourMap =  new Map();
+  const colourMap = new Map();
   colourMap.set('H', 'white');
   colourMap.set('C', 'black');
   colourMap.set('O', 'red');
@@ -60,17 +63,19 @@ function getColourMap(atoms) {
 
 function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
 
-  const lineMaterial = new THREE.LineBasicMaterial({ color: 'black' });
+  const lineMaterial = new THREE.LineBasicMaterial({
+    color: 'black'
+  });
   const points = [];
-  points.push( new THREE.Vector3( x1, y1, z1 ) );
-  points.push( new THREE.Vector3( x2, y2, z2 ) );
+  points.push(new THREE.Vector3(x1, y1, z1));
+  points.push(new THREE.Vector3(x2, y2, z2));
 
-  const geometry = new THREE.BufferGeometry().setFromPoints( points );
-  const line = new THREE.Line( geometry, lineMaterial );
+  const geometry = new THREE.BufferGeometry().setFromPoints(points);
+  const line = new THREE.Line(geometry, lineMaterial);
   return line;
 }
 
-function getBallAndStick(moleculeObj, outputPath=null) {
+function getBallAndStick(moleculeObj, outputPath = null) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
   const loader = new exporter();
@@ -80,12 +85,12 @@ function getBallAndStick(moleculeObj, outputPath=null) {
   const FAR = 10000;
 
   const camera =
-  new THREE.PerspectiveCamera(
+    new THREE.PerspectiveCamera(
       VIEW_ANGLE,
       2,
       NEAR,
       FAR
-  );
+    );
 
   const scene = new THREE.Scene();
   scene.add(camera);
@@ -95,74 +100,71 @@ function getBallAndStick(moleculeObj, outputPath=null) {
   const SEGMENTS = sphereQuality[1];
   const RINGS = sphereQuality[1];
 
-  const sphereMaterial =
-  new THREE.MeshLambertMaterial(
-    {
-      color: 0xCC0000
+  for (let i = 0; i < moleculeObj.atoms.length; i++) {
+
+    const atom = moleculeObj.atoms[i];
+
+    let colour = 'pink';
+    if (colourMap.has(atom['element'])) colour = colourMap.get(atom['element']);
+
+    const material = new THREE.MeshLambertMaterial({
+      color: colour,
     });
+    const atomRender = new THREE.Mesh(
+      new THREE.SphereGeometry(
+        RADIUS,
+        SEGMENTS,
+        RINGS),
+      material);
 
-    for(let i = 0; i < moleculeObj.atoms.length; i++) {
+    //*100 just to scale further apart
+    const xPos = atom['x'] * 100;
+    const yPos = atom['y'] * 100;
+    const zPos = atom['z'] * 100;
+    atomRender.position.x = xPos;
+    atomRender.position.y = yPos;
+    atomRender.position.z = zPos;
 
-      const atom = moleculeObj.atoms[i];
-
-      let colour = 'pink';
-      if(colourMap.has(atom['element'])) colour = colourMap.get(atom['element']);
-      
-      const material = new THREE.MeshLambertMaterial({
-        color: colour,
-      });
-      const atomRender = new THREE.Mesh(
-        new THREE.SphereGeometry(
-            RADIUS,
-            SEGMENTS,
-            RINGS),
-        
-        material);
-      
-      //*100 just to scale further apart
-      const xPos = atom['x'] * 100;
-      const yPos = atom['y'] * 100;
-      const zPos = atom['z'] * 100;
-
-      for(const bond of atom.bonded) {
-        const targetAtom = moleculeObj.atoms[parseInt(bond) - 1];
-        const targetX = targetAtom['x'] * 100;
-        const targetY = targetAtom['y'] * 100;
-        const targetZ = targetAtom['z'] * 100;
-
-        const line = getBallAndStickBond(xPos, targetX, yPos, targetY, zPos, targetZ);
-        scene.add(line);
-      }
-
-      atomRender.position.x = xPos;
-      atomRender.position.y = yPos;
-      atomRender.position.z = zPos;
-
-      scene.add(atomRender);
+    scene.add(atomRender);
   }
-  
+
+  moleculeObj.bonds.forEach((value, key) => {
+    const sourceAtom = moleculeObj.atoms[key - 1];
+    for (let target of value) {
+      const targetAtom = moleculeObj.atoms[target - 1];
+
+      const xPos = sourceAtom['x'] * 100;
+      const yPos = sourceAtom['y'] * 100;
+      const zPos = sourceAtom['z'] * 100;
+
+      const targetX = targetAtom['x'] * 100;
+      const targetY = targetAtom['y'] * 100;
+      const targetZ = targetAtom['z'] * 100;
+      const line = getBallAndStickBond(xPos, targetX, yPos, targetY, zPos, targetZ);
+      scene.add(line);
+    }
+  });
+
   loader.parse(scene, (content) => {
-    if(outputPath == null) return JSON.stringify(content);
+    if (outputPath == null) return JSON.stringify(content);
     fs = require('fs');
     fs.writeFile(outputPath, JSON.stringify(content), function (err) {
       if (err) return console.log(err);
-    }); 
-  },);
+    });
+  }, );
 }
 
 function getSphereQuality(numElements) {
   let radius = 50;
-  let segments = 10;
-  let rings = 10;
+  let segments = 9;
+  let rings = 1;
 
-  if(numElements > 1000) {
-    segments = 8;
-    rings = 8;
+  if (numElements > 1000) {
+    segments = 5;
   }
 
-  if(numElements > 5000) {
-    segments = 4;
-    rings = 4;
+  if (numElements > 5000) {
+    segments = 1;
   }
   return [radius, segments, rings];
 }

@@ -9,6 +9,7 @@ const atoms = [];
 const seqRes = []; // raw SEQRES entry data
 let residues = []; // individual residue data parsed from SEQRES
 const chains = new Map(); // individual rchaindata parsed from SEQRES
+const bonds = new Map(); //Map of molecules and their bonds
 
 const handlers = new Map();
 handlers.set(ATOM_NAME, parseAtomRow);
@@ -25,7 +26,7 @@ function parsePdbString(pdbString) {
     const fileType = pdbLine.substr(0, 6);
 
     const rowType = pdbLine.substr(0, 6);
-    if(handlers.has(rowType)) {
+    if (handlers.has(rowType)) {
       const handler = handlers.get(rowType);
       handler(pdbLine);
     }
@@ -52,14 +53,11 @@ function parsePdbString(pdbString) {
     // Derived
     residues, // Array of residue objects
     chains, // Map of chain objects keyed on chainID
+    bonds,
   };
-
 }
 
 function parsePdbFile(pdbFile) {
-  //Get type of file
-  //Get processor from dictionary
-
   const {
     readFileSync
   } = require('fs');
@@ -85,7 +83,6 @@ function parseAtomRow(pdbLine) {
     tempFactor: parseFloat(pdbLine.substring(60, 66)),
     element: pdbLine.substring(76, 78).trim(),
     charge: pdbLine.substring(78, 80).trim(),
-    bonded: [],
   });
 }
 
@@ -131,19 +128,26 @@ function parseHetatmRow(pdbLine) {
     tempFactor: parseFloat(pdbLine.substring(60, 66)),
     element: pdbLine.substring(76, 78).trim(),
     charge: pdbLine.substring(78, 80).trim(),
-    bonded: [],
   });
 }
 
 function parseConectRow(pdbLine) {
+  const parsedLine = pdbLine.replace(/ +(?= )/g, '');
+  const pdbValues = parsedLine.split(' ')
+  const moleculeId = parseInt(pdbValues[1]);
+  //Error handing for invalid CONECT lines
+  if(moleculeId - 1 > atoms.length) return;
+  if(isNaN(moleculeId)) return;
 
-  pdbLine = pdbLine.replace(/ +(?= )/g, '');
-  const pdbValues = pdbLine.split(' ')
-  const molecule = atoms[parseInt(pdbValues[1]) - 1];
-  const bonded = pdbValues.slice(2);
-  for(const target of bonded) {
-    molecule.bonded.push(parseInt(target));
+  const bondStrings = pdbValues.slice(2);
+  const bondedArray = new Array();
+  for(let bondString of bondStrings) {
+    const bondValue = parseInt(bondString);
+    //Error handing for invalid CONECT lines
+    if(bondValue - 1 > atoms.length) continue;
+    if(!isNaN(bondValue)) bondedArray.push(bondValue)
   }
+  bonds.set(moleculeId, bondedArray);
 }
 
 exports.parsePdbString = parsePdbString;

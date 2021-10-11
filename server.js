@@ -26,13 +26,6 @@ const port = parseInt(process.env.PORT || "8080") || 8080;
 // get the database url from the deployment environment
 const dbUrl = process.env.DATABASE_URL;
 
-const { readFileSync } = require('fs');
-const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
-const renderer = require('./conversion/moleculetogltfconverter.js');
-const pdbString = readFileSync('./static/examples/HAZGOF10[9].pdb', 'utf8');
-const atomData = pdbConverter.parsePdbString(pdbString);
-renderer.getBallAndStick(atomData, './static/molfile/test.gltf');
-
 configureRoutes(app);
 
 app.listen(port, () => {
