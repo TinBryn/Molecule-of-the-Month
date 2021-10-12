@@ -92,7 +92,7 @@ function getBallAndStick(moleculeObj, outputPath = null) {
       FAR
     );
 
-  const scene = new THREE.Scene();
+  let scene = new THREE.Scene();
   scene.add(camera);
 
   const sphereQuality = getSphereQuality(moleculeObj.atoms.length);
@@ -148,10 +148,11 @@ function getBallAndStick(moleculeObj, outputPath = null) {
   loader.parse(scene, (content) => {
     if (outputPath == null) return JSON.stringify(content);
     fs = require('fs');
-    fs.writeFile(outputPath, JSON.stringify(content), function (err) {
+    const options = { flag : 'w' };
+    fs.writeFile(outputPath, JSON.stringify(content), options, function (err) {
       if (err) return console.log(err);
-    });
-  }, );
+    },);
+  },);
 }
 
 function getSphereQuality(numElements) {

@@ -19,6 +19,17 @@ const users = []
 const enviroment = require("dotenv");
 enviroment.config();
 
+//Debug
+const { readFileSync } = require('fs');
+const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
+const gltfConverter = require('./conversion/moleculetogltfconverter.js');
+let pdbPath = path.join(__dirname, "static", `/examples/${process.env.MOLECULEPDB}`);
+let outputPath = path.join(__dirname, "static", `/molfile/molecule.gltf`);
+let pdbString = readFileSync(pdbPath, 'utf8');
+let atomData = pdbConverter.parsePdbString(pdbString);
+let gltfFile = gltfConverter.getBallAndStick(atomData, outputPath);
+console.log("Wrote to molecule.gltf");
+
 
 // get the port from the deployment environment or use 8080 as default
 const port = parseInt(process.env.PORT || "8080") || 8080;
