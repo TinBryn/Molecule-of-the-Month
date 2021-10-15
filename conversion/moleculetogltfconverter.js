@@ -75,7 +75,7 @@ function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
   return line;
 }
 
-function getBallAndStick(moleculeObj, outputPath = null) {
+async function getBallAndStick(moleculeObj, outputPath = null) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
   const loader = new exporter();
@@ -145,15 +145,23 @@ function getBallAndStick(moleculeObj, outputPath = null) {
     }
   });
 
-  loader.parse(scene, (content) => {
-    if (outputPath == null) return JSON.stringify(content);
-    fs = require('fs');
-    const options = { flag : 'w' };
-    fs.writeFile(outputPath, JSON.stringify(content), options, function (err) {
-      if (err) return console.log(err);
-    },);
-  },);
+  // return new Promise((resolve, reject) => {
+  //   loader.parse(scene, (content) => {
+  //     if(outputPath === null) return JSON.stringify(content);
+  //     fs = require('fs');
+  //     const options = { flag : 'w' };
+  //     fs.writeFile(outputPath, JSON.stringify(content), options, function (err) {
+  //       if (err) return console.log(err);
+  //     },);
+  //   },);
+  // });
+
+    return new Promise((resolve, reject) => {
+      loader.parse(scene, data => resolve(data), reject);
+    });
+
 }
+
 
 function getSphereQuality(numElements) {
   let radius = 50;

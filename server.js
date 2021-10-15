@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const path = require("path");
@@ -20,15 +19,9 @@ const enviroment = require("dotenv");
 enviroment.config();
 
 //Debug
-const { readFileSync } = require('fs');
-const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
-const gltfConverter = require('./conversion/moleculetogltfconverter.js');
-let pdbPath = path.join(__dirname, "static", `/examples/${process.env.MOLECULEPDB}`);
-let outputPath = path.join(__dirname, "static", `/molfile/molecule.gltf`);
-let pdbString = readFileSync(pdbPath, 'utf8');
-let atomData = pdbConverter.parsePdbString(pdbString);
-let gltfFile = gltfConverter.getBallAndStick(atomData, outputPath);
-console.log("Wrote to molecule.gltf");
+const {
+    readFileSync
+} = require('fs');
 
 
 // get the port from the deployment environment or use 8080 as default
@@ -47,9 +40,13 @@ function configureRoutes(app) {
     app.set("/", "html");
     app.use(express.static(path.join(__dirname, "static")));
     app.use(express.json());
-    app.use(express.urlencoded({ extended: false }));
+    app.use(express.urlencoded({
+        extended: false
+    }));
     app.set('view-engine', 'ejs')
-    app.use(express.urlencoded({ extended: false }))
+    app.use(express.urlencoded({
+        extended: false
+    }))
     app.use(flash())
     app.use(session({
         secret: process.env.SESSION_SECRET,
@@ -76,6 +73,21 @@ function configureRoutes(app) {
         res.sendFile(path.join(__dirname, "static", "templates/cms.html"));
     });
 
+    app.get('/api/todo', async (req, res) => {
+
+        const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
+        const gltfConverter = require('./conversion/moleculetogltfconverter.js');
+        //Fetch PDB from database string in the future
+        let pdbPath = path.join(__dirname, "static", `/examples/${process.env.MOLECULEPDB}`);
+        let outputPath = path.join(__dirname, "static", `/molfile/molecule.gltf`);
+        let pdbString = readFileSync(pdbPath, 'utf8');
+        let atomData = pdbConverter.parsePdbString(pdbString);
+        //GLTF file is generated per request so pretty costly
+        //Need to wait for the getBallAndStick function to return before sending
+        let gltfFile = await gltfConverter.getBallAndStick(atomData);
+        res.send(gltfFile);
+    });
+
     app.get("/api/molecule", (req, res) => {
         res.sendFile(path.join(__dirname, "static", "molfile", "molecule.gltf"));
     });
@@ -87,7 +99,9 @@ function configureRoutes(app) {
     // The below HTTP methods are used in the simple CMS app
     // the /submit route is used to upload files. Only accessible by authorised users. 
     app.get('/submit', checkAuthenticated, (req, res) => {
-        res.render('submit.ejs', { name: req.user.name })
+        res.render('submit.ejs', {
+            name: req.user.name
+        })
     })
 
     app.post('/submit', checkAuthenticated, function (req, res) {
