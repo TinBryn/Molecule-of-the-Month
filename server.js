@@ -58,18 +58,22 @@ function configureRoutes(app) {
     app.use(methodOverride('_method'))
     app.use(fileUpload())
     app.get('/', (_req, res) => {
+        console.log("landing page");
         res.sendFile(path.join(__dirname, "static", "templates/index.html"));
     });
 
     app.get('/molecule', (req, res) => {
+        console.log("app page");
         res.sendFile(path.join(__dirname, "static", "templates/molecule.html"));
     });
 
     app.get("/markerless", (req, res) => {
+        console.log("experimental page");
         res.sendFile(path.join(__dirname, "static", "templates/markerless.html"));
     })
 
     app.get("/admin/cms", (req, res) => {
+        console.log("CMS page");
         res.sendFile(path.join(__dirname, "static", "templates/cms.html"));
     });
 
