@@ -12,13 +12,15 @@ or use a package manager such as `apt`, `brew` with `[package-manager] install n
 
 2. install the requirements `npm install`
 
-3. Run the app with `npm start`
+3. When deployed on the internet, some security is involved, some parts of that are not included in this repository. This isn't a problem for local testing, and you can copy `.env example` and rename it to `.env`
 
-4. If you have an enviroment variable `PORT` it will parse this into a number, otherwise it will default to `8080`
+4. Run the app with `npm start`
 
-5. go to http://localhost:PORT in a browser on a device with a camera
+5. If you have an enviroment variable `PORT` it will parse this into a number, otherwise it will default to `8080`
 
-6. If using the AR application, the marker necessary to track the molecule is located at: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png
+6. go to [http://localhost:PORT](http://localhost:8080) in a browser on a device with a camera (if you want to use it on your phone for the AR experience you can open [http://\<your local network IP\>:PORT](http://192.168.20.30:8080) as the server is listening on `0.0.0.0:8080`)
+
+7. If using the AR application, the marker necessary to track the molecule is located at: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png
 
 
     
