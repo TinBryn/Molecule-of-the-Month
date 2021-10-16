@@ -1,12 +1,5 @@
-const express = require('express');
-const app = express();
-const path = require("path");
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const flash = require('express-flash');
-const session = require('express-session');
-const methodOverride = require('method-override');
-const fileUpload = require('express-fileupload');
 const initializePassport = require('./static/config/passport-config')
 initializePassport(
     passport,
@@ -18,38 +11,16 @@ const users = []
 const enviroment = require("dotenv");
 enviroment.config();
 
-//Debug
-const {
-    readFileSync
-} = require('fs');
-
-
 // get the port from the deployment environment or use 8080 as default
-const port = parseInt(process.env.PORT || "8080") || 8080;
+const port = normalizePort(process.env.PORT || "8080");
+
+
+const app = require("./app");
+
+app.set("port", port);
 
 // get the database url from the deployment environment
 const dbUrl = process.env.DATABASE_URL;
-
-app.set("/", "html");
-app.use(express.static(path.join(__dirname, "static")));
-app.use(express.json());
-app.use(express.urlencoded({
-    extended: false
-}));
-app.set('view-engine', 'ejs')
-app.use(express.urlencoded({
-    extended: false
-}))
-app.use(flash())
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}))
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(methodOverride('_method'))
-app.use(fileUpload())
 
 configureRoutes(app);
 
@@ -60,36 +31,15 @@ app.listen(port, () => {
 function configureRoutes(app) {
 
     const siteRouter = require("./static/routes/site");
-
     siteRouter(app);
 
-    app.get('/api/todo', async (req, res) => {
+    const apiRouter = require("./static/routes/api");
+    apiRouter(app);
 
-        const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
-        const gltfConverter = require('./conversion/moleculetogltfconverter.js');
-        //Fetch PDB from database string in the future
-        let pdbPath = path.join(__dirname, "static", `/examples/${process.env.MOLECULEPDB}`);
-        let outputPath = path.join(__dirname, "static", `/molfile/molecule.gltf`);
-        let pdbString = readFileSync(pdbPath, 'utf8');
-        let atomData = pdbConverter.parsePdbString(pdbString);
-        //GLTF file is generated per request so pretty costly
-        //Need to wait for the getBallAndStick function to return before sending
-        let gltfFile = await gltfConverter.getBallAndStick(atomData);
-        res.send(gltfFile);
-    });
+    configureCmsRoutes(app);
+}
 
-    app.get("/api/molecule", (req, res) => {
-        res.sendFile(path.join(__dirname, "static", "molfile", "molecule.gltf"));
-    });
-
-    app.get("/api/molecule_ar", (req, res) => {
-        res.sendFile(path.join(__dirname, "static", "molfile", "dna1.usdz"));
-    });
-
-    //todo const apiRouter = require("./static/routes/site");
-    //todo apiRouter(app);
-
-
+function configureCmsRoutes(app) {
     // The below HTTP methods are used in the simple CMS app
     // the /submit route is used to upload files. Only accessible by authorised users. 
     app.get('/submit', checkAuthenticated, (req, res) => {
@@ -149,8 +99,8 @@ function configureRoutes(app) {
         req.logOut()
         res.redirect('/login')
     })
-
 }
+
 
 // These next two functions check respectively if the user is Authenticated/logged in or not.
 function checkAuthenticated(req, res, next) {
@@ -166,4 +116,23 @@ function checkNotAuthenticated(req, res, next) {
         return res.redirect('/submit')
     }
     next()
+}
+
+/**
+ ** Normalize a port into a number, string, or false.
+ **/
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
 }
