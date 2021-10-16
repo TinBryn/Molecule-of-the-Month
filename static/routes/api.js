@@ -1,9 +1,7 @@
 const path = require("path");
-const {
-    readFileSync
-} = require('fs');
+const { readFileSync} = require('fs');
 
-function configureApiRoutes(app) {
+module.exports = (app) => {
     app.get('/api/todo', async (req, res) => {
 
         const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
@@ -26,8 +24,4 @@ function configureApiRoutes(app) {
     app.get("/api/molecule_ar", (req, res) => {
         res.sendFile(path.join(__dirname, "..", "molfile", "dna1.usdz"));
     });
-}
-
-module.exports = (app) => {
-    configureApiRoutes(app);
 }
