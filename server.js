@@ -7,7 +7,7 @@ const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
-const initializePassport = require('./passport-config')
+const initializePassport = require('./static/config/passport-config')
 initializePassport(
     passport,
     email => users.find(user => user.email === email),
@@ -30,6 +30,27 @@ const port = parseInt(process.env.PORT || "8080") || 8080;
 // get the database url from the deployment environment
 const dbUrl = process.env.DATABASE_URL;
 
+app.set("/", "html");
+app.use(express.static(path.join(__dirname, "static")));
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: false
+}));
+app.set('view-engine', 'ejs')
+app.use(express.urlencoded({
+    extended: false
+}))
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(methodOverride('_method'))
+app.use(fileUpload())
+
 configureRoutes(app);
 
 app.listen(port, () => {
@@ -37,45 +58,10 @@ app.listen(port, () => {
 });
 
 function configureRoutes(app) {
-    app.set("/", "html");
-    app.use(express.static(path.join(__dirname, "static")));
-    app.use(express.json());
-    app.use(express.urlencoded({
-        extended: false
-    }));
-    app.set('view-engine', 'ejs')
-    app.use(express.urlencoded({
-        extended: false
-    }))
-    app.use(flash())
-    app.use(session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false
-    }))
-    app.use(passport.initialize())
-    app.use(passport.session())
-    app.use(methodOverride('_method'))
-    app.use(fileUpload())
-    app.get('/', (_req, res) => {
-        console.log("landing page");
-        res.sendFile(path.join(__dirname, "static", "templates/index.html"));
-    });
 
-    app.get('/molecule', (req, res) => {
-        console.log("app page");
-        res.sendFile(path.join(__dirname, "static", "templates/molecule.html"));
-    });
+    const siteRouter = require("./static/routes/site");
 
-    app.get("/markerless", (req, res) => {
-        console.log("experimental page");
-        res.sendFile(path.join(__dirname, "static", "templates/markerless.html"));
-    })
-
-    app.get("/admin/cms", (req, res) => {
-        console.log("CMS page");
-        res.sendFile(path.join(__dirname, "static", "templates/cms.html"));
-    });
+    siteRouter(app);
 
     app.get('/api/todo', async (req, res) => {
 
@@ -99,6 +85,10 @@ function configureRoutes(app) {
     app.get("/api/molecule_ar", (req, res) => {
         res.sendFile(path.join(__dirname, "static", "molfile", "dna1.usdz"));
     });
+
+    //todo const apiRouter = require("./static/routes/site");
+    //todo apiRouter(app);
+
 
     // The below HTTP methods are used in the simple CMS app
     // the /submit route is used to upload files. Only accessible by authorised users. 
@@ -159,6 +149,7 @@ function configureRoutes(app) {
         req.logOut()
         res.redirect('/login')
     })
+
 }
 
 // These next two functions check respectively if the user is Authenticated/logged in or not.
