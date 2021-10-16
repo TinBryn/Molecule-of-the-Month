@@ -4,25 +4,45 @@
 
 <head>
     <title>Molecule of the Month</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../styles/index.css">
 </head>
 
 <body>
+  
+        
 
-    <h1> Welcome to the Molecule of the Month Web AR application</h1>
+            <div class="col-xs-12">
+                <div id="header"> Welcome to the Molecule of the Month Web AR application</div>
+            </div>
+            <div class="col-xs-12" id="btnloc">
+                <button class="btn"><a href="/login">Log into CMS</a></button>
 
-    <button class="btn2"><a href="/login">Log into CMS</a></button>
+                <button class="btn"><a href="/molecule">Open app</a></button>
+        
+                <button class="btn"><a href="/markerless">Experimental</a></button>
+            </div>
+            <div class="col-xs-12" id="instruction">
+                <h2><b>How it works:</b></h3>
+                <h3>1. Click the 'Open app' button above</h3>
+                <h3>2. Focus your camera on the Hiro marker, then the molecule of the month will be rendered on top of it</h3>
+                <h3>3. You can also rotate the molecule, zoom in and zoom out</h3>
+                <h3>Please note: As this is a pure marker-based AR application, the marker should always be visible to the camera</h3>
+            </div>
 
-    <button class="btn"><a href="/molecule">Open app</a></button>
-
-    <button class="btn3"><a href="/markerless">Experimental</a></button>
-
-
-    <footer>
-        <p>Image scource: https://www.ft.com/content/212f9436-9a03-11e6-8f9b-70e3cabccfae </p>
-    </footer>
+            <div class="col-xs-12" id="fter">
+                <p>Image scource: https://www.ft.com/content/212f9436-9a03-11e6-8f9b-70e3cabccfae</p>
+            </div>
 
 
+          </div>
+        
+
+        
 </body>
 
 </html>
