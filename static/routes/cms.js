@@ -1,33 +1,31 @@
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const initializePassport = require("../config/passport-config");
+const users = [];
+initializePassport(
+    passport,
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id)
+);
+
+
+// These next two functions check respectively if the user is Authenticated/logged in or not.
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+
+    res.redirect('/login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/submit')
+    }
+    next()
+}
 
 module.exports = app => {
-
-    const passport = require("passport");
-    const initializePassport = require("../config/passport-config");
-    initializePassport(
-        passport,
-        email => users.find(user => user.email === email),
-        id => users.find(user => user.id === id)
-    )
-
-    const users = []
-
-    // These next two functions check respectively if the user is Authenticated/logged in or not.
-    function checkAuthenticated(req, res, next) {
-        if (req.isAuthenticated()) {
-            return next()
-        }
-
-        res.redirect('/login')
-    }
-
-    function checkNotAuthenticated(req, res, next) {
-        if (req.isAuthenticated()) {
-            return res.redirect('/submit')
-        }
-        next()
-    }
-
-
     // The below HTTP methods are used in the simple CMS app
     // the /submit route is used to upload files. Only accessible by authorised users. 
     app.get('/submit', checkAuthenticated, (req, res) => {
@@ -87,4 +85,4 @@ module.exports = app => {
         req.logOut()
         res.redirect('/login')
     })
-}
+};
