@@ -1,8 +1,8 @@
 const path = require("path");
-const { readFileSync} = require('fs');
+const { readFileSync } = require('fs');
 
 module.exports = (app) => {
-    app.get('/api/todo', async (req, res) => {
+    app.get('/api/todo', async(req, res) => {
 
         const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
         const gltfConverter = require('./conversion/moleculetogltfconverter.js');
@@ -18,7 +18,7 @@ module.exports = (app) => {
     });
 
     app.get("/api/molecule", (req, res) => {
-        res.sendFile(path.join(__dirname, "..", "molfile", "molecule.gltf"));
+        res.sendFile(path.join(__dirname, "..", "molfile", "dna1.gltf"));
     });
 
     app.get("/api/molecule_ar", (req, res) => {
