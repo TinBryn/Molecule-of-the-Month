@@ -10,9 +10,21 @@
         "start": "node server.js",
         "test": "jest"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "keywords": [
+        "Augmented Reality",
+        "Chemistry",
+        "Molecules",
+        "UWA",
+        "web"
+    ],
+    "authors": [
+        "Daniel Claassen <>",
+        "Kieran Griffiths <20491633@student.uwa.edu.au>",
+        "William Knight <>",
+        "Jessy Wang <>",
+        "Songyuan Zhang <>"
+    ],
+    "license": "CC-BY",
     "dependencies": {
         "bcrypt": "^5.0.1",
         "canvas": "^2.8.0",
