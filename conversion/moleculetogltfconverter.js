@@ -24,6 +24,12 @@ global.document = {
   }
 };
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} atoms 
+ * @returns 
+ */
 function getColourMap(atoms) {
 
   const colourMap = new Map();
@@ -61,6 +67,17 @@ function getColourMap(atoms) {
   return colourMap;
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} x1 
+ * @param {*} x2 
+ * @param {*} y1 
+ * @param {*} y2 
+ * @param {*} z1 
+ * @param {*} z2 
+ * @returns 
+ */
 function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
 
   const lineMaterial = new THREE.LineBasicMaterial({
@@ -75,6 +92,13 @@ function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
   return line;
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} moleculeObj 
+ * @param {*} outputPath 
+ * @returns 
+ */
 async function getBallAndStick(moleculeObj, outputPath = null) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
@@ -156,13 +180,18 @@ async function getBallAndStick(moleculeObj, outputPath = null) {
   //   },);
   // });
 
-    return new Promise((resolve, reject) => {
-      loader.parse(scene, data => resolve(data), reject);
-    });
+  return new Promise((resolve, reject) => {
+    loader.parse(scene, data => resolve(data), reject);
+  });
 
 }
 
-
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} numElements 
+ * @returns 
+ */
 function getSphereQuality(numElements) {
   let radius = 50;
   let segments = 9;

@@ -1,15 +1,39 @@
-//Convertors
+/**
+ * Convertors
+ * 
+ * todo @Cosmo801 from what I understand this is derivative from https://github.com/justinmc/parse-pdb which is under MIT should this also be MIT?
+ * @license MIT?
+ */
 
 const ATOM_NAME = 'ATOM  ';
 const RESIDUE_NAME = 'SEQRES';
 const HETATM_NAME = 'HETATM';
 const CONECT = "CONECT";
 
+/**
+ * todo @Cosmo801
+ */
 const atoms = [];
-const seqRes = []; // raw SEQRES entry data
-let residues = []; // individual residue data parsed from SEQRES
-const chains = new Map(); // individual rchaindata parsed from SEQRES
-const bonds = new Map(); //Map of molecules and their bonds
+
+/**
+ * raw SEQRES entry data
+ */
+const seqRes = [];
+
+/**
+ * individual residue data parsed from SEQRES
+ */
+let residues = [];
+
+/**
+ * individual rchaindata parsed from SEQRES
+ */
+const chains = new Map();
+
+/**
+ * Map of molecules and their bonds
+ */
+const bonds = new Map();
 
 const handlers = new Map();
 handlers.set(ATOM_NAME, parseAtomRow);
@@ -17,6 +41,12 @@ handlers.set(RESIDUE_NAME, parseResidueRow);
 handlers.set(HETATM_NAME, parseHetatmRow);
 handlers.set(CONECT, parseConectRow);
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} pdbString 
+ * @returns 
+ */
 function parsePdbString(pdbString) {
 
   const pdbLines = pdbString.split('\n');
@@ -57,6 +87,12 @@ function parsePdbString(pdbString) {
   };
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} pdbFile 
+ * @returns 
+ */
 function parsePdbFile(pdbFile) {
   const {
     readFileSync
@@ -66,6 +102,11 @@ function parsePdbFile(pdbFile) {
   return parsePdbString(pdb);
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} pdbLine 
+ */
 function parseAtomRow(pdbLine) {
   // http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM
   atoms.push({
@@ -86,6 +127,11 @@ function parseAtomRow(pdbLine) {
   });
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} pdbLine 
+ */
 function parseResidueRow(pdbLine) {
   // http://www.wwpdb.org/documentation/file-format-content/format33/sect3.html#SEQRES
   const seqResEntry = {
@@ -112,6 +158,11 @@ function parseResidueRow(pdbLine) {
   }
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} pdbLine 
+ */
 function parseHetatmRow(pdbLine) {
   atoms.push({
     serial: parseInt(pdbLine.substring(6, 11)),
@@ -131,6 +182,12 @@ function parseHetatmRow(pdbLine) {
   });
 }
 
+/**
+ * todo @Cosmo801
+ * 
+ * @param {*} pdbLine 
+ * @returns 
+ */
 function parseConectRow(pdbLine) {
   const parsedLine = pdbLine.replace(/ +(?= )/g, '');
   const pdbValues = parsedLine.split(' ')
