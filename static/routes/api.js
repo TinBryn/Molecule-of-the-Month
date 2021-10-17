@@ -6,7 +6,7 @@ module.exports = (app) => {
     /**
      * todo @Cosmo801
      */
-    app.get('/api/todo', async(req, res) => {
+    app.get('/api/todo', async(request, response) => {
 
         const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
         const gltfConverter = require('./conversion/moleculetogltfconverter.js');
@@ -18,7 +18,7 @@ module.exports = (app) => {
         //GLTF file is generated per request so pretty costly
         //Need to wait for the getBallAndStick function to return before sending
         let gltfFile = await gltfConverter.getBallAndStick(atomData);
-        res.send(gltfFile);
+        response.send(gltfFile);
     });
 
     /**
@@ -27,7 +27,7 @@ module.exports = (app) => {
      * @todo This currently sends a static file and is to prevent that behaviour
      *       from being hard coded throughout the rest of the application.
      */
-    app.get("/api/molecule", (req, res) => {
-        res.sendFile(path.join(__dirname, "..", "molfile", "dna1.gltf"));
+    app.get("/api/molecule", (request, response) => {
+        response.sendFile(path.join(__dirname, "..", "molfile", "dna1.gltf"));
     });
 }

@@ -4,7 +4,7 @@ enviroment.config();
 // get the port from the deployment environment or use 8080 as default
 const port = normalizePort(process.env.PORT || "8080");
 // get the database url from the deployment environment
-const dbUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.DATABASE_URL;
 
 
 const app = require("./app");

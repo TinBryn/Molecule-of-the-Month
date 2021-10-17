@@ -16,11 +16,11 @@ client.connect();
  */
 initializePassport(
     passport,
-    email => client.query("SELECT * FROM users WHERE email='$1'", [email], (err, res) => {
-        if (err) {
-            console.log(err.stack)
+    email => client.query("SELECT * FROM users WHERE email='$1'", [email], (error, result) => {
+        if (error) {
+            console.log(error.stack)
         } else {
-            return JSON.stringify(res.rows[0])
+            return JSON.stringify(result.rows[0])
         }
     }),
 );
@@ -29,13 +29,13 @@ initializePassport(
 /**
  * Check if the user is Authenticated/logged in
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {*} request 
+ * @param {*} response 
  * @param {*} next 
  * @returns 
  */
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
+function checkAuthenticated(request, response, next) {
+    if (request.isAuthenticated()) {
         return next()
     }
     response.redirect('/login')
@@ -44,14 +44,14 @@ function checkAuthenticated(req, res, next) {
 /**
  * Check if the user is not Authenticated/logged in
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {*} request 
+ * @param {*} response 
  * @param {*} next 
  * @returns 
  */
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/submit')
+function checkNotAuthenticated(request, response, next) {
+    if (request.isAuthenticated()) {
+        return response.redirect('/submit')
     }
     next()
 }
@@ -65,38 +65,40 @@ module.exports = app => {
     /**
      * the /submit route is used to upload files. Only accessible by authorised users. 
      * 
+     * @param {*} request
+     * @param {*} response
      */
-    app.get('/submit', checkAuthenticated, (req, res) => {
-        res.render('submit.ejs', {
-            name: req.user.name
+    app.get('/submit', checkAuthenticated, (request, response) => {
+        response.render('submit.ejs', {
+            name: request.user.name
         })
     })
     
     /**
      * The way the file structure queues files is by naming convention. Each file uploaded has a name corresponding to the month and year selected for it.
      */
-    app.post('/submit', checkAuthenticated, function (req, res) {
+    app.post('/submit', checkAuthenticated, function (request, response) {
         let sampleFile;
         let uploadPath;
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).send('No files were uploaded.');
+        if (!request.files || Object.keys(request.files).length === 0) {
+            return response.status(400).send('No files were uploaded.');
         }
-        var d = String(req.body.time);
+        var d = String(request.body.time);
         d = d.substring(0, d.length - 3);
-        sampleFile = req.files.sampleFile;
+        sampleFile = request.files.sampleFile;
         uploadPath = __dirname + '/files/' + d;
         sampleFile.mv(uploadPath, function (err) {
             if (err)
-                return res.status(500).send(err);
-            res.send('File uploaded.');
+                return response.status(500).send(err);
+            response.send('File uploaded.');
         });
     });
 
     /**
      * todo @danielgerardclaassen
      */
-    app.get('/login', checkNotAuthenticated, (req, res) => {
-        res.render('login.ejs')
+    app.get('/login', checkNotAuthenticated, (request, response) => {
+        response.render('login.ejs')
     })
 
     /**
@@ -116,24 +118,24 @@ module.exports = app => {
     /**
      * todo @danielgerardclaassen
      */
-    app.get('/register', checkNotAuthenticated, (req, res) => {
-        res.render('register.ejs')
+    app.get('/register', checkNotAuthenticated, (request, response) => {
+        response.render('register.ejs')
     })
 
     /**
      * registered users have their details inserted into heroku database.
      */
-    app.post('/register', checkNotAuthenticated, async (req, res) => {
+    app.post('/register', checkNotAuthenticated, async (request, response) => {
         try {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [Date.now().toString(), req.body.name, hashedPassword, req.body.email], (err, res) => {
+            const hashedPassword = await bcrypt.hash(request.body.password, 10);
+            client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [Date.now().toString(), request.body.name, hashedPassword, request.body.email], (err, res) => {
                 if (err) {
                     console.log(err.stack)
                 }
             });
-            res.redirect('/login')
+            response.redirect('/login')
         } catch {
-            res.redirect('/register')
+            response.redirect('/register')
         }
     })
 
@@ -141,20 +143,20 @@ module.exports = app => {
      * This route is used when users log out.
      * 
      */
-    app.delete('/logout', (req, res) => {
-        req.logOut()
-        res.redirect('/login')
+    app.delete('/logout', (request, response) => {
+        request.logOut()
+        response.redirect('/login')
     })
 
     /**
      * This route will automatically serve the file corresponding to the current month and year only. 
      */
-    app.get('/download', function (req, res) {
+    app.get('/download', function (request, response) {
         var d = new Date();
         var year = String(d.getFullYear())
         var month = String(d.getMonth() + 1)
         var name = String(year + '-' + month)
         const file = __dirname + '/files/' + name;
-        res.download(file);
+        response.download(file);
     })
 };
