@@ -25,45 +25,46 @@ initializePassport(
     }),
 );
 
+
 /**
- * Check if the user is authenticated
+ * Check if the user is Authenticated/logged in
  * 
- * todo @danielgerardclaassen
- * @param {*} request 
- * @param {*} response 
+ * @param {*} req 
+ * @param {*} res 
  * @param {*} next 
  * @returns 
  */
-function checkAuthenticated(request, response, next) {
-    if (request.isAuthenticated()) {
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
         return next()
     }
     response.redirect('/login')
 }
 
 /**
- * Check if the user is not authenticated
+ * Check if the user is not Authenticated/logged in
  * 
- * todo @danielgerardclaassen
- * @param {*} request 
- * @param {*} response 
+ * @param {*} req 
+ * @param {*} res 
  * @param {*} next 
  * @returns 
  */
-function checkNotAuthenticated(request, response, next) {
-    if (request.isAuthenticated()) {
-        return response.redirect('/submit')
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/submit')
     }
     next()
 }
 
 /**
  * The below HTTP methods are used in the simple CMS app
+ * 
+ * @param {Express} app The web application these will be added to.
  */
 module.exports = app => {
-
     /**
-     * the `/submit` route is used to upload files. Only accessible by authorised users. The download route is responsible for serving the current month's file.
+     * the /submit route is used to upload files. Only accessible by authorised users. 
+     * 
      */
     app.get('/submit', checkAuthenticated, (req, res) => {
         res.render('submit.ejs', {
@@ -138,6 +139,7 @@ module.exports = app => {
 
     /**
      * This route is used when users log out.
+     * 
      */
     app.delete('/logout', (req, res) => {
         req.logOut()

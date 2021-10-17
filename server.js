@@ -22,14 +22,19 @@ app.listen(port, () => {
 });
 
 /**
- ** Normalize a port into a number, string, or false.
- **/
-function normalizePort(val) {
-    var port = parseInt(val, 10);
+ * Normalize a port
+ * 
+ * @param {string} port: the string that represents the port 
+ * @returns if the port parses into a number in base 10, that number is returned
+ *          if the port parses into NaN, then the original string is returned
+ *          otherwise `false` is returned
+ */
+function normalizePort(port) {
+    var port = parseInt(port, 10);
 
     if (isNaN(port)) {
         // named pipe
-        return val;
+        return port;
     }
 
     if (port >= 0) {

@@ -2,69 +2,58 @@ body {
     background-image: url('../background/background.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: cover;
+    background-size: 100% 100%;
     padding: 0;
     margin: 0;
 }
 
-h1 {
+#header {
     font-size: 60px;
     font-family: verdana;
     text-align: center;
-    margin: 0;
+    margin: 20px;
     padding: 0;
     color: white;
-    position: absolute;
-    top: 25%;
+    position: relative;
+    top: 50px;
+    font-weight:bold;
 }
 
 .btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    background-color: #f1f1f1;
-    font-size: 25px;
-    padding: 16px 30px;
+    background-color: white;
+    padding: 5px;
+    margin: 15px;
     border: none;
     border-radius: 5px;
     text-align: center;
     font-family: verdana;
 }
-.btn2 {
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    background-color: #f1f1f1;
+.btn a{
     font-size: 25px;
-    padding: 16px 30px;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    font-family: verdana;
 }
 
-.btn3 {
-    position: absolute;
-    top: 50%;
-    left: 70%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    background-color: #f1f1f1;
-    font-size: 25px;
-    padding: 16px 30px;
-    border: none;
-    border-radius: 5px;
+#btnloc{
+    position: relative;
+    top: 150px;
     text-align: center;
-    font-family: verdana;
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
+#instruction{
+    color:black;
+    font-family: verdana;
+    margin: 20px,20px,20px,20px;
+    padding: 5px;
+    text-align: center;
+    position: relative;
+    top: 500px;
+    left:50%;
+    transform: translate(-50%, -50%);
+    background-color:rgba(250, 232, 232,0.75);
+}
+
+#fter {
+    position: relative;
+    top:600px;
     color: grey;
 }
 

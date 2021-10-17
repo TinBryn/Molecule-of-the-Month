@@ -1,8 +1,8 @@
 const path = require("path");
-const { readFileSync} = require('fs');
+const { readFileSync } = require('fs');
 
 module.exports = (app) => {
-    app.get('/api/todo', async (req, res) => {
+    app.get('/api/todo', async(req, res) => {
 
         const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
         const gltfConverter = require('./conversion/moleculetogltfconverter.js');
@@ -17,10 +17,23 @@ module.exports = (app) => {
         res.send(gltfFile);
     });
 
+    /**
+     * An endpoint for downloading the current molecule model.
+     * 
+     * @todo This currently sends a static file and is to prevent that behaviour
+     *       from being hard coded throughout the rest of the application.
+     */
     app.get("/api/molecule", (req, res) => {
-        res.sendFile(path.join(__dirname, "..", "molfile", "molecule.gltf"));
+        res.sendFile(path.join(__dirname, "..", "molfile", "dna1.gltf"));
     });
 
+    /**
+     * An experimental API for downloading a USDZ file which iOS devices will view
+     * in an an AR experience. Id doesn't work so don't use this
+     * 
+     * @experimental
+     * @broken
+     */
     app.get("/api/molecule_ar", (req, res) => {
         res.sendFile(path.join(__dirname, "..", "molfile", "dna1.usdz"));
     });
