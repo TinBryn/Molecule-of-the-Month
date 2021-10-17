@@ -10,8 +10,8 @@ const databaseUrl = process.env.DATABASE_URL;
 const app = require("./app");
 app.set("port", port);
 
-const siteRouter = require("./static/routes/site");
-const apiRouter = require("./static/routes/api");
+const siteRouter = require("./static/routes/site.routes");
+const apiRouter = require("./static/routes/api.routes");
 const cmsRouter = require("./static/routes/cms");
 siteRouter(app);
 apiRouter(app);
