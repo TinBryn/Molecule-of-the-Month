@@ -113,24 +113,24 @@ module.exports = app => {
     })
 };
 
-const functions = {
-    addUser: (id, username, password, email) => client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [id, username, password, email]),
-    fileSubmit: () => {
-        fs.readFile(__dirname + '/test.txt', (error, data) => {
-            uploadPath = __dirname + '/TestDirectory/';
-            data.mv(uploadPath);
-        })
-    },
-    passwordEncrypt: (password) => {
-        var secret = bcrypt.hash(password, 10);
-        return secret;
-    },
-    passwordDecrypt: (hashed, password) => {
-        bcrypt.compare(password, hashed, (err, valid) => {
-            if (valid) {
-                return true
-            }
-        })
-    }
-}
-module.exports = functions;
+// const functions = {
+//     addUser: (id, username, password, email) => client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [id, username, password, email]),
+//     fileSubmit: () => {
+//         fs.readFile(__dirname + '/test.txt', (error, data) => {
+//             uploadPath = __dirname + '/TestDirectory/';
+//             data.mv(uploadPath);
+//         })
+//     },
+//     passwordEncrypt: (password) => {
+//         var secret = bcrypt.hash(password, 10);
+//         return secret;
+//     },
+//     passwordDecrypt: (hashed, password) => {
+//         bcrypt.compare(password, hashed, (err, valid) => {
+//             if (valid) {
+//                 return true
+//             }
+//         })
+//     }
+// }
+// module.exports = functions;
