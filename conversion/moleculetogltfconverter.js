@@ -99,7 +99,7 @@ function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
  * @param {*} outputPath 
  * @returns 
  */
-async function getBallAndStick(moleculeObj, outputPath = null) {
+async function getBallAndStick(moleculeObj, scale=10) {
 
   const colourMap = getColourMap(moleculeObj.atoms);
   const loader = new exporter();
@@ -142,9 +142,9 @@ async function getBallAndStick(moleculeObj, outputPath = null) {
       material);
 
     //*100 just to scale further apart
-    const xPos = atom['x'] * 100;
-    const yPos = atom['y'] * 100;
-    const zPos = atom['z'] * 100;
+    const xPos = atom['x'] * scale;
+    const yPos = atom['y'] * scale;
+    const zPos = atom['z'] * scale;
     atomRender.position.x = xPos;
     atomRender.position.y = yPos;
     atomRender.position.z = zPos;
@@ -157,28 +157,17 @@ async function getBallAndStick(moleculeObj, outputPath = null) {
     for (let target of value) {
       const targetAtom = moleculeObj.atoms[target - 1];
 
-      const xPos = sourceAtom['x'] * 100;
-      const yPos = sourceAtom['y'] * 100;
-      const zPos = sourceAtom['z'] * 100;
+      const xPos = sourceAtom['x'] * scale;
+      const yPos = sourceAtom['y'] * scale;
+      const zPos = sourceAtom['z'] * scale;
 
-      const targetX = targetAtom['x'] * 100;
-      const targetY = targetAtom['y'] * 100;
-      const targetZ = targetAtom['z'] * 100;
+      const targetX = targetAtom['x'] * scale;
+      const targetY = targetAtom['y'] * scale;
+      const targetZ = targetAtom['z'] * scale;
       const line = getBallAndStickBond(xPos, targetX, yPos, targetY, zPos, targetZ);
       scene.add(line);
     }
   });
-
-  // return new Promise((resolve, reject) => {
-  //   loader.parse(scene, (content) => {
-  //     if(outputPath === null) return JSON.stringify(content);
-  //     fs = require('fs');
-  //     const options = { flag : 'w' };
-  //     fs.writeFile(outputPath, JSON.stringify(content), options, function (err) {
-  //       if (err) return console.log(err);
-  //     },);
-  //   },);
-  // });
 
   return new Promise((resolve, reject) => {
     loader.parse(scene, data => resolve(data), reject);
@@ -193,12 +182,12 @@ async function getBallAndStick(moleculeObj, outputPath = null) {
  * @returns 
  */
 function getSphereQuality(numElements) {
-  let radius = 50;
-  let segments = 9;
+  let radius = 5;
+  let segments = 12;
   let rings = 1;
 
   if (numElements > 1000) {
-    segments = 5;
+    segments = 10;
   }
 
   if (numElements > 5000) {
