@@ -1,6 +1,11 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const initializePassport = require("../config/passport-config");
+/**
+ * A structure containing the registered users
+ * 
+ * @todo this should be stored in a database for persistance
+ */
 const users = [];
 initializePassport(
     passport,
@@ -9,7 +14,14 @@ initializePassport(
 );
 
 
-// These next two functions check respectively if the user is Authenticated/logged in or not.
+/**
+ * Check if the user is Authenticated/logged in
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
@@ -18,6 +30,14 @@ function checkAuthenticated(req, res, next) {
     res.redirect('/login')
 }
 
+/**
+ * Check if the user is not Authenticated/logged in
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return res.redirect('/submit')
@@ -25,15 +45,25 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
+/**
+ * The below HTTP methods are used in the simple CMS app
+ * 
+ * @param {Express} app The web application these will be added to.
+ */
 module.exports = app => {
-    // The below HTTP methods are used in the simple CMS app
-    // the /submit route is used to upload files. Only accessible by authorised users. 
+    /**
+     * the /submit route is used to upload files. Only accessible by authorised users. 
+     * 
+     */
     app.get('/submit', checkAuthenticated, (req, res) => {
         res.render('submit.ejs', {
             name: req.user.name
         })
     })
 
+    /**
+     * todo @danielgerardclaassen
+     */
     app.post('/submit', checkAuthenticated, function (req, res) {
         let sampleFile;
         let uploadPath;
@@ -50,20 +80,32 @@ module.exports = app => {
         });
     });
 
+    /**
+     * todo @danielgerardclaassen
+     */
     app.get('/login', checkNotAuthenticated, (req, res) => {
         res.render('login.ejs')
     })
 
+    /**
+     * todo @danielgerardclaassen
+     */
     app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
         successRedirect: '/submit',
         failureRedirect: '/login',
         failureFlash: true
     }))
 
+    /**
+     * todo @danielgerardclaassen
+     */
     app.get('/register', checkNotAuthenticated, (req, res) => {
         res.render('register.ejs')
     })
 
+    /**
+     * todo @danielgerardclaassen
+     */
     app.post('/register', checkNotAuthenticated, async (req, res) => {
         try {
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
@@ -80,7 +122,10 @@ module.exports = app => {
         console.log(users)
     })
 
-    // This route is used when users log out.
+    /**
+     * This route is used when users log out.
+     * 
+     */
     app.delete('/logout', (req, res) => {
         req.logOut()
         res.redirect('/login')
