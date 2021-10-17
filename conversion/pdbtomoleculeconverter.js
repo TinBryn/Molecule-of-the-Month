@@ -1,8 +1,8 @@
 /**
  * Convertors
  * 
- * todo @Cosmo801 from what I understand this is derivative from https://github.com/justinmc/parse-pdb which is under MIT should this also be MIT?
- * @license MIT?
+ * Adapted from https://github.com/justinmc/parse-pdb
+ * MIT License
  */
 
 const ATOM_NAME = 'ATOM  ';
@@ -11,7 +11,7 @@ const HETATM_NAME = 'HETATM';
 const CONECT = "CONECT";
 
 /**
- * todo @Cosmo801
+ * List of atoms and their properties 
  */
 const atoms = [];
 
@@ -35,17 +35,20 @@ const chains = new Map();
  */
 const bonds = new Map();
 
+/*
+ * Set up the handlers to parse each line of the pdb file
+ */
 const handlers = new Map();
 handlers.set(ATOM_NAME, parseAtomRow);
 handlers.set(RESIDUE_NAME, parseResidueRow);
 handlers.set(HETATM_NAME, parseHetatmRow);
 handlers.set(CONECT, parseConectRow);
 
-/**
- * todo @Cosmo801
- * 
- * @param {*} pdbString 
- * @returns 
+/** * 
+ * @param {string} pdbString 
+ *  String conforming to pdb standards
+ * @returns {object}
+ *  atoms, seqRes, residues, chains, bonds
  */
 function parsePdbString(pdbString) {
 
@@ -83,15 +86,16 @@ function parsePdbString(pdbString) {
     // Derived
     residues, // Array of residue objects
     chains, // Map of chain objects keyed on chainID
-    bonds,
+    bonds, //Map of bonded elements
   };
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} pdbFile 
- * @returns 
+ * @param {string} pdbFile 
+ *  Path to a pdb file on the file system
+ * @returns {object}
+ *  atoms, seqRes, residues, chains, bonds
  */
 function parsePdbFile(pdbFile) {
   const {
@@ -103,9 +107,8 @@ function parsePdbFile(pdbFile) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} pdbLine 
+ * @param {string} pdbLine 
  */
 function parseAtomRow(pdbLine) {
   // http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM
@@ -128,9 +131,8 @@ function parseAtomRow(pdbLine) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} pdbLine 
+ * @param {string} pdbLine 
  */
 function parseResidueRow(pdbLine) {
   // http://www.wwpdb.org/documentation/file-format-content/format33/sect3.html#SEQRES
@@ -159,9 +161,8 @@ function parseResidueRow(pdbLine) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} pdbLine 
+ * @param {string} pdbLine 
  */
 function parseHetatmRow(pdbLine) {
   atoms.push({
@@ -183,10 +184,8 @@ function parseHetatmRow(pdbLine) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} pdbLine 
- * @returns 
+ * @param {string} pdbLine 
  */
 function parseConectRow(pdbLine) {
   const parsedLine = pdbLine.replace(/ +(?= )/g, '');

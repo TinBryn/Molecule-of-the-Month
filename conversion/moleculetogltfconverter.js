@@ -6,8 +6,10 @@ const {
   FileReader
 } = require('vblob');
 
-// Patch global scope to imitate browser environment.
-// From https://gist.github.com/donmccurdy/9f094575c1f1a48a2ddda513898f6496
+/** Patch global scope to imitate browser environment.
+ * This is just a hack to get threejs working on the server 
+ * From https://gist.github.com/donmccurdy/9f094575c1f1a48a2ddda513898f6496
+ */
 global.window = global;
 global.Blob = Blob;
 global.FileReader = FileReader;
@@ -25,10 +27,11 @@ global.document = {
 };
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} atoms 
- * @returns 
+ * @param {object} atoms 
+ *  List of atoms from pdbtomoleculeconverter output
+ * @returns {Map} colourMap
+ *  Maps an element symbol to a x11 colour
  */
 function getColourMap(atoms) {
 
@@ -68,15 +71,15 @@ function getColourMap(atoms) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} x1 
- * @param {*} x2 
- * @param {*} y1 
- * @param {*} y2 
- * @param {*} z1 
- * @param {*} z2 
- * @returns 
+ * @param {number} x1 
+ * @param {number} x2 
+ * @param {number} y1 
+ * @param {number} y2 
+ * @param {number} z1 
+ * @param {number} z2 
+ *  For each dimension pass a starting coordinate (e.g. x1) and an ending coordinate (e.g. x2)
+ * @returns {THREE.Line}
  */
 function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
 
@@ -93,11 +96,16 @@ function getBallAndStickBond(x1, x2, y1, y2, z1, z2) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} moleculeObj 
- * @param {*} outputPath 
- * @returns 
+ * Takes the output of pdbmoleculeconverter.js parsing and uses the three.js api to create as scene to be output as a GLTF file
+ * 
+ * @param {object} moleculeObj 
+ *  Output from pdbtomoleculeconverter.js
+ * @param {number} scale 
+ *  Scale the coordinate system - Some molecules need different scaling values to be more legible
+ *  
+ * @returns {Promise}
+ *  A promise to returna gltf file string
  */
 async function getBallAndStick(moleculeObj, scale=10) {
 
@@ -176,10 +184,11 @@ async function getBallAndStick(moleculeObj, scale=10) {
 }
 
 /**
- * todo @Cosmo801
  * 
- * @param {*} numElements 
- * @returns 
+ * @param {int} numElements 
+ * @returns {Array}
+ *  Returns array of options for rendering spheres [radius, segments, rings]
+ *  Increasing the number of segments increases quality at the cost of performance
  */
 function getSphereQuality(numElements) {
   let radius = 5;
@@ -195,6 +204,5 @@ function getSphereQuality(numElements) {
   }
   return [radius, segments, rings];
 }
-
 
 exports.getBallAndStick = getBallAndStick;

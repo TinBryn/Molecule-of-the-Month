@@ -45,6 +45,5 @@ async function getMoleculeOfTheMonth() {
 }
 
 module.exports = {
-    todo: todo,
     molecule: molecule,
 }
