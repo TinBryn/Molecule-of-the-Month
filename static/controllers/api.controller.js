@@ -1,12 +1,9 @@
 const path = require("path");
 const { readFileSync } = require('fs');
-const enviroment = require("dotenv");
+const environment = require("dotenv");
 
 /**
  * An endpoint for downloading the current molecule model.
- * 
- * @todo This currently sends a static file and is to prevent that behaviour
- *       from being hard coded throughout the rest of the application.
  * 
  * @param {Request} request
  * @param {Response} response
@@ -20,6 +17,16 @@ module.exports = {
     molecule: molecule,
 }
 
+/**
+ * Generate a GLTF file specified in the .env file
+ * MOLECULEPDB - THe name of the pdb file
+ *  The pdb file must be located in /static/examples folder
+ * MOLECULESCALE
+ *  The scale of the molecule
+ * 
+ * @returns {string}
+ *  A gltf file as a string
+ */
 async function debugGetMoleculeOfTheMonth() {
     const pdbConverter = require('../../conversion/pdbtomoleculeconverter.js');
     const gltfConverter = require('../../conversion/moleculetogltfconverter.js');
@@ -35,11 +42,17 @@ async function debugGetMoleculeOfTheMonth() {
     return gltfFile;
 }
 
-//Fetch from database
+/**
+ * Generate a GLTF file for the molecule of the month
+ * 
+ * @todo Get pdb string from database when its setup
+ * @returns {string}
+ *  A GLTF file as a string
+ */
 async function getMoleculeOfTheMonth() {
 
-    const environment = process.env.DEVELOPMENT_ENVIRONMENT;
-    if (environment == 'develop') {
+    const devEnvironment = process.env.DEVELOPMENT_ENVIRONMENT;
+    if (devEnvironment == 'develop') {
         return await debugGetMoleculeOfTheMonth();
     }
 }
