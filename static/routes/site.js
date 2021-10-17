@@ -16,12 +16,4 @@ module.exports = app => {
         console.log("app page");
         response.sendFile(path.join(__dirname, "../views/molecule.html"));
     })
-    
-    /**
-     * The CMS functionality so an admin can schedule which molecules will be displayed
-     */
-    app.get("/admin/cms", (_request, res) => {
-        console.log("CMS page");
-        response.sendFile(path.join(__dirname, "../views/cms.html"));
-    });
 }
