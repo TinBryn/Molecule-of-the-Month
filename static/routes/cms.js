@@ -7,14 +7,14 @@ const bcrypt = require('bcrypt');
 const initializePassport = require("../config/passport-config");
 const fileUpload = require('express-fileupload');
 const methodOverride = require('method-override');
-const {Client} = require('pg');
+const { Client } = require('pg');
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false
     }
 })
-//connections below are used in fileuploading
+// connections below are used in fileuploading
 app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: false }));
 app.use(fileUpload());
@@ -56,7 +56,7 @@ module.exports = app => {
             name: req.user.name
         })
     })
-//The way the file structure queues files is by naming convention. Each file uploaded has a name corresponding to the month and year selected for it.
+    // The way the file structure queues files is by naming convention. Each file uploaded has a name corresponding to the month and year selected for it.
     app.post('/submit', checkAuthenticated, function (req, res) {
         let sampleFile;
         let uploadPath;
@@ -64,7 +64,7 @@ module.exports = app => {
             return res.status(400).send('No files were uploaded.');
         }
         var d = String(req.body.time);
-        d = d.substring(0, d.length-3);
+        d = d.substring(0, d.length - 3);
         sampleFile = req.files.sampleFile;
         uploadPath = __dirname + '/files/' + d;
         sampleFile.mv(uploadPath, function (err) {
@@ -78,25 +78,25 @@ module.exports = app => {
         res.render('login.ejs')
     })
 
-    app.post('/login', (req,res,next) => {
+    app.post('/login', (req, res, next) => {
         checkNotAuthenticated;
         next();
-        },
+    },
         passport.authenticate('login', {
-        successRedirect: '/submit',
-        failureRedirect: '/login',
-        failureFlash: true
-    })
+            successRedirect: '/submit',
+            failureRedirect: '/login',
+            failureFlash: true
+        })
     )
 
     app.get('/register', checkNotAuthenticated, (req, res) => {
         res.render('register.ejs')
     })
-//registered users have their details inserted into heroku database.
+    // registered users have their details inserted into heroku database.
     app.post('/register', checkNotAuthenticated, async (req, res) => {
         try {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [Date.now().toString(), req.body.name,hashedPassword,req.body.email], (err, res) => {
+            client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [Date.now().toString(), req.body.name, hashedPassword, req.body.email], (err, res) => {
                 if (err) {
                     console.log(err.stack)
                 }
@@ -112,11 +112,11 @@ module.exports = app => {
         req.logOut()
         res.redirect('/login')
     })
-//This route will automatically serve the file corresponding to the current month and year only.
-    app.get('/download',function(req,res) {
+    // This route will automatically serve the file corresponding to the current month and year only.
+    app.get('/download', function (req, res) {
         var d = new Date();
         var year = String(d.getFullYear())
-        var month = String(d.getMonth()+1)
+        var month = String(d.getMonth() + 1)
         var name = String(year + '-' + month)
         const file = __dirname + '/files/' + name;
         res.download(file);
@@ -124,15 +124,15 @@ module.exports = app => {
 };
 
 const functions = {
-    addUser: (id,username,password,email) => client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)',[id,username,password,email]),
+    addUser: (id, username, password, email) => client.query('INSERT INTO users(user_id,username,password,email) VALUES($1,$2,$3,$4)', [id, username, password, email]),
     fileSubmit: () => {
-        fs.readFile(__dirname+'/test.txt', (error, data) => {
+        fs.readFile(__dirname + '/test.txt', (error, data) => {
             uploadPath = __dirname + '/TestDirectory/';
             data.mv(uploadPath);
         })
     },
     passwordEncrypt: (password) => {
-        var secret = bcrypt.hash(password,10);
+        var secret = bcrypt.hash(password, 10);
         return secret;
     },
     passwordDecrypt: (hashed, password) => {
