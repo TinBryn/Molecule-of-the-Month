@@ -5,6 +5,9 @@ module.exports = (app) => {
 
     /**
      * todo @Cosmo801
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.get('/api/todo', async(request, response) => {
 
@@ -26,6 +29,9 @@ module.exports = (app) => {
      * 
      * @todo This currently sends a static file and is to prevent that behaviour
      *       from being hard coded throughout the rest of the application.
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.get("/api/molecule", (request, response) => {
         response.sendFile(path.join(__dirname, "..", "molfile", "dna1.gltf"));

@@ -13,6 +13,9 @@ client.connect();
 
 /**
  * todo @danielgerardclaassen
+ * 
+ * @param {Request} request
+ * @param {Response} response
  */
 initializePassport(
     passport,
@@ -29,8 +32,10 @@ initializePassport(
 /**
  * Check if the user is Authenticated/logged in
  * 
- * @param {*} request 
- * @param {*} response 
+ * todo @danielgerardclaassen returns and what `next` is
+ * 
+ * @param {Request} request 
+ * @param {Response} response 
  * @param {*} next 
  * @returns 
  */
@@ -44,8 +49,10 @@ function checkAuthenticated(request, response, next) {
 /**
  * Check if the user is not Authenticated/logged in
  * 
- * @param {*} request 
- * @param {*} response 
+ * todo @danielgerardclaassen returns and what `next` is
+ * 
+ * @param {Request} request 
+ * @param {Response} response 
  * @param {*} next 
  * @returns 
  */
@@ -65,19 +72,22 @@ module.exports = app => {
     /**
      * the /submit route is used to upload files. Only accessible by authorised users. 
      * 
-     * @param {*} request
-     * @param {*} response
+     * @param {Request} request 
+     * @param {Response} response 
      */
     app.get('/submit', checkAuthenticated, (request, response) => {
         response.render('submit.ejs', {
             name: request.user.name
         })
     })
-    
+
     /**
      * The way the file structure queues files is by naming convention. Each file uploaded has a name corresponding to the month and year selected for it.
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
-    app.post('/submit', checkAuthenticated, function (request, response) {
+    app.post('/submit', checkAuthenticated, (request, response) => {
         let sampleFile;
         let uploadPath;
         if (!request.files || Object.keys(request.files).length === 0) {
@@ -96,6 +106,9 @@ module.exports = app => {
 
     /**
      * todo @danielgerardclaassen
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.get('/login', checkNotAuthenticated, (request, response) => {
         response.render('login.ejs')
@@ -103,6 +116,9 @@ module.exports = app => {
 
     /**
      * todo @danielgerardclaassen
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.post('/login', (req, res, next) => {
         checkNotAuthenticated;
@@ -117,6 +133,9 @@ module.exports = app => {
 
     /**
      * todo @danielgerardclaassen
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.get('/register', checkNotAuthenticated, (request, response) => {
         response.render('register.ejs')
@@ -124,6 +143,9 @@ module.exports = app => {
 
     /**
      * registered users have their details inserted into heroku database.
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.post('/register', checkNotAuthenticated, async (request, response) => {
         try {
@@ -142,6 +164,8 @@ module.exports = app => {
     /**
      * This route is used when users log out.
      * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.delete('/logout', (request, response) => {
         request.logOut()
@@ -150,6 +174,9 @@ module.exports = app => {
 
     /**
      * This route will automatically serve the file corresponding to the current month and year only. 
+     * 
+     * @param {Request} request
+     * @param {Response} response
      */
     app.get('/download', function (request, response) {
         var d = new Date();
