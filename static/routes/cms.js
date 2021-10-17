@@ -1,12 +1,7 @@
-const express = require('express');
-const app = express();
-const path = require("path");
 const fs = require('fs')
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const initializePassport = require("../config/passport-config");
-const fileUpload = require('express-fileupload');
-const methodOverride = require('method-override');
 const { Client } = require('pg');
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
@@ -14,11 +9,6 @@ const client = new Client({
         rejectUnauthorized: false
     }
 })
-// connections below are used in fileuploading
-app.use(express.static(path.join(__dirname, "static")));
-app.use(express.urlencoded({ extended: false }));
-app.use(fileUpload());
-app.use(methodOverride('_method'));
 
 client.connect();
 

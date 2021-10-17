@@ -11,15 +11,8 @@ const app = express();
 
 
 app.set("/", "html");
-app.use(express.static(path.join(__dirname, "static")));
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: false
-}));
-app.set('view-engine', 'ejs')
-app.use(express.urlencoded({
-    extended: false
-}))
+app.set('view-engine', 'ejs');
 app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -28,8 +21,12 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(methodOverride('_method'))
+
+// connections below are used in fileuploading
+app.use(express.static(path.join(__dirname, "static")));
+app.use(express.urlencoded({ extended: false }));
 app.use(fileUpload())
+app.use(methodOverride('_method'))
 
 
 module.exports = app;
