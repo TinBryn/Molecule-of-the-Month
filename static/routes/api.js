@@ -30,15 +30,4 @@ module.exports = (app) => {
     app.get("/api/molecule", (req, res) => {
         res.sendFile(path.join(__dirname, "..", "molfile", "dna1.gltf"));
     });
-
-    /**
-     * An experimental API for downloading a USDZ file which iOS devices will view
-     * in an an AR experience. Id doesn't work so don't use this
-     * 
-     * @experimental
-     * @broken
-     */
-    app.get("/api/molecule_ar", (req, res) => {
-        res.sendFile(path.join(__dirname, "..", "molfile", "dna1.usdz"));
-    });
 }

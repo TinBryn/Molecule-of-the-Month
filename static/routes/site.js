@@ -18,16 +18,6 @@ module.exports = app => {
     })
     
     /**
-     * 
-     * @exprimental
-     * @broken
-     */
-    app.get("/markerless", (_request, res) => {
-        console.log("experimental page");
-        response.sendFile(path.join(__dirname, "../views/markerless.html"));
-    })
-    
-    /**
      * The CMS functionality so an admin can schedule which molecules will be displayed
      */
     app.get("/admin/cms", (_request, res) => {
