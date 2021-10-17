@@ -2,6 +2,10 @@ const path = require("path");
 const { readFileSync } = require('fs');
 
 module.exports = (app) => {
+
+    /**
+     * todo @Cosmo801
+     */
     app.get('/api/todo', async(req, res) => {
 
         const pdbConverter = require('./conversion/pdbtomoleculeconverter.js');
