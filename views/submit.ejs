@@ -1,14 +1,28 @@
-<h1>test <%= name %> </h1>
-
-<form ref='uploadForm'
-    id='uploadForm'
-    action='http://localhost:8080/submit'
-    method='post'
-    encType='multipart/form-data'>
-        <input type='file' name='sampleFile' />
-        <input type='submit' value='Upload'/>
-</form>
-
-<form action="/logout?_method=DELETE" method="POST">
-    <button type="submit">Log Out</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Submit</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../static/styles/cms.css">
+        <style>p { max-width: 100px; }</style>
+    </head>
+    <body>
+        <div>
+            <h1>Submit a File</h1>
+            <p>Click the browse button to bring up the file navigator. After
+                reaching the file you wish to upload, double click on it. Then
+                in the date box, select the month you wish the file to be shown
+                (the exact day is irrelevant). Then press upload.</p>
+            <form ref='uploadForm' id='uploadForm'
+                action='http://localhost:8080/submit' method='post'
+                encType='multipart/form-data'>
+                <input type='file' name='sampleFile' />
+                <input type='date' name='time' />
+                <input type='submit' value='Upload' />
+            </form>
+            <form action="/logout?_method=DELETE" method="POST">
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+    </body>
+</html>
