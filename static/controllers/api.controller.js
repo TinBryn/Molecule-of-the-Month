@@ -39,9 +39,12 @@ async function debugGetMoleculeOfTheMonth() {
 async function getMoleculeOfTheMonth() {
 
     const environment = process.env.DEVELOPMENT_ENVIRONMENT;
-    if(environment == 'develop') {
+    if (environment == 'develop') {
         return await debugGetMoleculeOfTheMonth();
     }
+}
 
-
+module.exports = {
+    todo: todo,
+    molecule: molecule,
 }
