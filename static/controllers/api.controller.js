@@ -54,6 +54,9 @@ async function getMoleculeOfTheMonth() {
     const devEnvironment = process.env.DEVELOPMENT_ENVIRONMENT;
     if (devEnvironment == 'develop') {
         return await debugGetMoleculeOfTheMonth();
+    } else {
+        // do it anyway
+        return await debugGetMoleculeOfTheMonth();
     }
 }
 
