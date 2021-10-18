@@ -66,6 +66,9 @@ function getColourMap(atoms) {
   colourMap.set('Ra', 'darkgreen');
   colourMap.set('Ti', 'grey');
   colourMap.set('Fe', 'darkorange');
+  colourMap.set('Cd', 'peru');
+  colourMap.set('Te', 'chocolate');
+  colourMap.set('Sc', 'darkgray');
 
   return colourMap;
 }
