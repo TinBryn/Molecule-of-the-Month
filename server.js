@@ -27,7 +27,7 @@ if (enableApi) {
 const enableCms = process.env.BAYLISS_FEATURE_CMS == "true";
 
 if (enableCms) {
-    const cmsRouter = require("./static/routes/cms");
+    const cmsRouter = require("./static/routes/cms.routes");
     cmsRouter(app);
 }
 
