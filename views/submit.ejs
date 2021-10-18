@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+    <style>
+        div {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        padding-bottom: 20px;
+        }
+    </style>
     <head>
         <title>Submit</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="../static/styles/cms.css">
-        <style>p { max-width: 100px; }</style>
     </head>
     <body>
         <div>
@@ -13,6 +18,7 @@
                 reaching the file you wish to upload, double click on it. Then
                 in the date box, select the month you wish the file to be shown
                 (the exact day is irrelevant). Then press upload.</p>
+            <div>
             <form ref='uploadForm' id='uploadForm'
                 action='http://localhost:8080/submit' method='post'
                 encType='multipart/form-data'>
@@ -20,9 +26,12 @@
                 <input type='date' name='time' />
                 <input type='submit' value='Upload' />
             </form>
+            </div>
+            <div>
             <form action="/logout?_method=DELETE" method="POST">
                 <button type="submit">Log Out</button>
             </form>
+            </div>
         </div>
     </body>
 </html>
