@@ -45,3 +45,10 @@ Beyond the above steps for running the program, this application requires a sess
 The word secret can be substituted for any word of your choosing.
 
 Once on the landing page, navigate to the login page. From here, you can register a user. Enter in your details and you will be redirected, and able to log in. After logging in, you will be redirected to the submit page, where you can upload a file. Once you choose a file to submit and you submit it, you will see the message, 'File Uploaded', and you will see your file in the 'files' directory in your copy of the repository.
+
+### Local Conversion
+
+* Place a .pdb file of your choosing in the /static/examples folder
+* In the .env file set the MOLECULEPDB file to the name of the .pdb file (name only, not the full path)
+* You can change the MOLECULESCALE which my be necessary for some larger molecules
+* Restart the server and your molecule will be served at /molecule
