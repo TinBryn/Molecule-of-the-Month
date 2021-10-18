@@ -10,12 +10,26 @@ const databaseUrl = process.env.DATABASE_URL;
 const app = require("./app");
 app.set("port", port);
 
-const siteRouter = require("./static/routes/site.routes");
-const apiRouter = require("./static/routes/api.routes");
-const cmsRouter = require("./static/routes/cms");
-siteRouter(app);
-apiRouter(app);
-cmsRouter(app);
+const enableSite = process.env.BAYLISS_FEATURE_SITE == "true";
+
+if (enableSite) {
+    const siteRouter = require("./static/routes/site.routes");
+    siteRouter(app);
+}
+
+const enableApi = process.env.BAYLISS_FEATURE_API == "true";
+
+if (enableApi) {
+    const apiRouter = require("./static/routes/api.routes");
+    apiRouter(app);
+}
+
+const enableCms = process.env.BAYLISS_FEATURE_CMS == "true";
+
+if (enableCms) {
+    const cmsRouter = require("./static/routes/cms");
+    cmsRouter(app);
+}
 
 app.listen(port, () => {
     console.log("listen on http://localhost:" + port);
