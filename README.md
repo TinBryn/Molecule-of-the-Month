@@ -3,24 +3,21 @@ A mobile AR application for displaying a molecule inside the UWA Bayliss buildin
 
 ## Marker-based AR
 
-### Tutorial followed
-https://www.youtube.com/watch?v=NIXJJoqM8BQ&t=319s
-
 ### Running the Program
-1. download node.js from https://nodejs.org/en/download/ on your pc  
+1. download [node.js](https://nodejs.org/en/download/) onto your pc  
 or use a package manager such as `apt`, `brew` with `[package-manager] install npm`
 
 2. install the requirements `npm install`
 
-3. When deployed on the internet, some security is involved, some parts of that are not included in this repository. This isn't a problem for local testing, and you can copy `.env example` and rename it to `.env`
+3. When deployed on the internet, some security is involved, therefore some secrets are not included in this repository. For local testing you can fake these secrets by copying `.env example` and renaming it to `.env`
 
 4. Run the app with `npm start`
 
 5. If you have an enviroment variable `PORT` it will parse this into a number, otherwise it will default to `8080`
 
-6. go to [http://localhost:PORT](http://localhost:8080) in a browser on a device with a camera (if you want to use it on your phone for the AR experience you can open [http://\<your local network IP\>:PORT](http://192.168.20.30:8080) as the server is listening on `0.0.0.0:8080`)
+6. go to [http://localhost:PORT](http://localhost:8080) in a browser on a device with a camera (if you want to use it on your phone for the AR experience you can open [http://\<your local network IP\>:PORT](http://192.168.nnn.nnn:8080) as the server is listening on `0.0.0.0:8080`)
 
-7. If using the AR application, the marker necessary to track the molecule is located at: https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png
+7. If using the AR application, the marker necessary to track the molecule is located at: [Hiro Marker](https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png)
 
 
     
@@ -52,3 +49,7 @@ Once on the landing page, navigate to the login page. From here, you can registe
 * In the .env file set the MOLECULEPDB file to the name of the .pdb file (name only, not the full path)
 * You can change the MOLECULESCALE which my be necessary for some larger molecules
 * Restart the server and your molecule will be served at /molecule
+
+
+### References
+- [Video tutorial on AR.js](https://www.youtube.com/watch?v=NIXJJoqM8BQ&t=319s)
