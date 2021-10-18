@@ -34,7 +34,10 @@
             <!--Render gltf model file-->
 
             <a-entity position="0 1 0" rotation="90 0 0" scale="0.03 0.03 0.03" gltf-model="#bowser" class="clickable"
-                gesture-handler></a-entity>
+                gesture-handler>
+                <a-animation attribute="rotation" dur="100000" to="0 360 0" easing="linear" repeat="indefinite">
+                </a-animation>
+            </a-entity>
             <a-entity position="0 0 -1" scale="1 1 1"
                 text="width:5; lineHeight:60; letterSpacing:3; color:white; value:Molecule of the Month"
                 rotation="-60 0 0">
