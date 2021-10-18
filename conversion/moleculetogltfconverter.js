@@ -192,7 +192,7 @@ async function getBallAndStick(moleculeObj, scale=10) {
  */
 function getSphereQuality(numElements) {
   let radius = 5;
-  let segments = 12;
+  let segments = 15;
   let rings = 1;
 
   if (numElements > 1000) {

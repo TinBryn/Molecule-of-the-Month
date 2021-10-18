@@ -13,10 +13,6 @@ const molecule = async (request, response) => {
     response.send(gltfFile);
 };
 
-module.exports = {
-    molecule: molecule,
-}
-
 /**
  * Generate a GLTF file specified in the .env file
  * MOLECULEPDB - THe name of the pdb file
@@ -30,7 +26,6 @@ module.exports = {
 async function debugGetMoleculeOfTheMonth() {
     const pdbConverter = require('../../conversion/pdbtomoleculeconverter.js');
     const gltfConverter = require('../../conversion/moleculetogltfconverter.js');
-    //Fetch PDB from database string in the future
     let pdbPath = path.join(__dirname, "..", `/examples/${process.env.MOLECULEPDB}`);
     const moleculeScale = process.env.MOLECULESCALE;
     let outputPath = path.join(__dirname, "..", `/molfile/molecule.gltf`);
@@ -45,7 +40,8 @@ async function debugGetMoleculeOfTheMonth() {
 /**
  * Generate a GLTF file for the molecule of the month
  * 
- * @todo Get pdb string from database when its setup
+ * @todo Get pdb string from database when its setup, remove debug implementation
+ * @todo Alternatively, write the GLTF file to file system and serve per request
  * @returns {string}
  *  A GLTF file as a string
  */
