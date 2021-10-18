@@ -52,6 +52,8 @@ And at the end, add
 
 Where `[...]` corresponds to the current heroku database URI. This can be accessed from the heroku dyno posgresql configuration settings tab, and will enable your local to connect to the online database.
 
+To enable client side file upload functionality, also navigate to `/static/controllers` and add a folder titled `files`. This is where uploaded files will be sent.
+
 Once on the landing page, navigate to the login page. From here, you can register a user. Enter in your details and you will be redirected, and able to log in. After logging in, you will be redirected to the submit page, where you can upload a file. Once you choose a file to submit and you submit it, you will see the message, 'File Uploaded', and you will see your file in the 'files' directory in your copy of the repository with the corresponding year/month naming convention. Navigating to `/download` will allow you to download the file for the current month if one is available. Otherwise, it returns an error. This functionality is non-effectual on the heroku deployment as it times server directories and is a feature intended to be used long term on a more robust server deployment.
 
 ## Conversion
