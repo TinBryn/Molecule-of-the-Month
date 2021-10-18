@@ -30,18 +30,31 @@ This is a website application designed to go alongside the mobile app for viewin
 * An accessible user interface
 * Access to authorised individuals (implemented through user authentication)
 * The uploading of abstract files
-* The storing of files
+* The storing of files in a queue system
 * Downloading files to a user 
 
 ### Usage
 
-Beyond the above steps for running the program, this application requires a session hash that is used to encrypt user passwords. Navigate to the base directory and create a new file '.env' with a single line
+Beyond the above steps for running the program:
+This application requires a session hash that is used to encrypt user passwords. Navigate to the base directory and inside '.env example' check the following:
 
 `SESSION_SECRET=secret` 
 
 The word secret can be substituted for any word of your choosing.
 
-Once on the landing page, navigate to the login page. From here, you can register a user. Enter in your details and you will be redirected, and able to log in. After logging in, you will be redirected to the submit page, where you can upload a file. Once you choose a file to submit and you submit it, you will see the message, 'File Uploaded', and you will see your file in the 'files' directory in your copy of the repository.
+`BAYLISS_FEATURE_CMS=true`
+
+The `true` tag here enables CMS functionality.
+
+And at the end, add
+
+`DATABASE_URL=[...]`
+
+Where `[...]` corresponds to the current heroku database URI. This can be accessed from the heroku dyno posgresql configuration settings tab, and will enable your local to connect to the online database.
+
+Once on the landing page, navigate to the login page. From here, you can register a user. Enter in your details and you will be redirected, and able to log in. After logging in, you will be redirected to the submit page, where you can upload a file. Once you choose a file to submit and you submit it, you will see the message, 'File Uploaded', and you will see your file in the 'files' directory in your copy of the repository with the corresponding year/month naming convention. Navigating to `/download` will allow you to download the file for the current month if one is available. Otherwise, it returns an error. This functionality is non-effectual on the heroku deployment as it times server directories and is a feature intended to be used long term on a more robust server deployment.
+
+## Conversion
 
 ### Local Conversion
 
